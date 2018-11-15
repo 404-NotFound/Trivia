@@ -5,6 +5,6 @@ Proyecto final para Jovenes A Programar 2018
 404_NotFound
 
 # Integrantes:
-Matias Mutter
-Jeronimo Gomez
+Matias Mutter, 
+Jeronimo Gomez, 
 Florencia Britors
