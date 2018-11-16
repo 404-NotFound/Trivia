@@ -1,8 +1,14 @@
  * {box-sizing: border-box;}
 
 /* COLORES SUGERIDOS:
+#COMBINA CON AMARILLO:
+ GRIS=#686868,
+ VIOLETA=#72117a,
+ NARANJA=#da532c
+ 
+#COMBINA CON VIOLETA:
  ROJO=#873d3d,
- VIOLACEO=#a12da3;
+ VIOLACEO=#a12da3,
  VIOLETA=#873d5d,
  AZUL1=#51509b,
  AZUL2=#48479b,
@@ -41,7 +47,7 @@ ul {
 
 li {
 	float: left;
-}
+	}
 
 li a{
 	display: block;
@@ -49,20 +55,20 @@ li a{
 	text-align: center;
 	padding: 14px 16px;
 	text-decoration: none;
-}
+	}
 
 li a:hover {
 	background-color: #2A2A2A;
-}
+	}
 
-#menu{	
+#menu{
 	font-family: 'PT Sans Narrow', sans-serif;
 	position: fixed;
 	right: 0;
 
     margin-top:auto;
-    margin-bottom: auto; 
-}
+    margin-bottom: auto;
+    }
 
 body{
 	font-family: 'Ubuntu', sans-serif;
