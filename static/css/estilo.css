@@ -95,3 +95,10 @@ h1{
 	padding-top: 25px;
 	font-family: 'Roboto', sans-serif;
 }
+
+#formulario{
+	margin: 0 auto;
+	width: 60%;
+	padding: 15px;
+	background-color: #262626;
+}

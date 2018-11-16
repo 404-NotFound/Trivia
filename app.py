@@ -27,3 +27,10 @@ def trivia_resultado():
 def trivia_fin():
     return render_template("fin.html")
 
+@app.route('/nosotros')
+def nosotros():
+    return render_template("nosotros.html")
+
+@app.route('/contacto')
+def contacto():
+    return render_template("contacto.html")
