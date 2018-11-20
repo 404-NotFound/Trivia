@@ -15,11 +15,11 @@ def trivia():
 def trivia_categorias():
     return render_template("categorias.html")
 
-@app.route('/trivia/<int:id_categoria>/pregunta')
+@app.route('/trivia/<id_categoria>/pregunta')
 def trivia_pregunta(id_categoria):
     return render_template("pregunta.html",id_categoria)
 
-@app.route('/trivia/<id_categoria>/resultado/<int:id_respuesta>')
+@app.route('/trivia/{id_categoria}/resultado/{id_respuesta}')
 def trivia_resultado():
     return render_template("resutlaado.html",id_categoria,id_respuesta)
 
