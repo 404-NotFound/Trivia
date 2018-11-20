@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#pepe
 from flask import Flask, render_template
 
 app = Flask(__name__)
@@ -19,8 +22,8 @@ def trivia_categorias():
 def trivia_pregunta(id_categoria):
     return render_template("pregunta.html",id_categoria)
 
-@app.route('/trivia/{id_categoria}/resultado/{id_respuesta}')
-def trivia_resultado():
+@app.route('/trivia/<id_categoria>/resultado/<id_respuesta>')
+def trivia_resultado(id_categoria,id_respuesta):
     return render_template("resutlaado.html",id_categoria,id_respuesta)
 
 @app.route('/trivia/fin')
