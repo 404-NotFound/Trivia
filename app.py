@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, redirect, url_for
+from models.trivia import db, Categorias
 
 app = Flask(__name__)
 
@@ -14,6 +15,7 @@ def trivia_inicio():
 
 @app.route('/trivia/categorias')
 def trivia_categorias():
+    
     return render_template("categorias.html")
 
 @app.route('/trivia/<int:id_categoria>/pregunta')
