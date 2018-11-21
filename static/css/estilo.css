@@ -14,16 +14,7 @@
  AZUL2=#48479b,
  NARANJA=#ffc42f */
 
-.row::after {
-	content: "";
-	clear: both;
-	display: block;
-}
-
-[class*="col-"] {
-	float: left;
-}
-
+[class*="col-"] {float: left;}
 .col-1 {width: 8.33%;}
 .col-2 {width: 16.66%;}
 .col-3 {width: 25%;}
@@ -37,21 +28,87 @@
 .col-11 {width: 91.66%;}
 .col-12 {width: 100%;}
 
-ul {
+html, body{
+	margin: 0 auto;
+    padding:0;
+	height: 100%;
+	background-color: black;
+	}
+	
+.row::after {
+	content: "";
+	clear: both;
+	display: block;
+	}
+	
+#container {
+	background-color: black;
+	color: white;
+	position: relative;
+	min-height: 100vh;
+    overflow: auto;
+	}
+	
+#header{
+	font-family: 'PT Sans Narrow', sans-serif;
+	position: fixed;
+	right: 0;
+    margin-top:auto;
+    }
+    
+#content{
+	width: 80%;
+	margin: 0 auto;
+	background-color: #2a2a2a;
+	font-family: 'Ubuntu', sans-serif;
+	padding: 30px;
+	padding-bottom:5%;
+	}
+	
+#spacer{
+	width: 80%;
+	margin: 0 auto;
+	background-color: #2a2a2a;
+	height: 100%;
+	padding-bottom:auto;
+	}
+	
+#footer{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	background-color: #1e1e1e;
+	font-family: 'Roboto', sans-serif;
+	text-align: center;
+}
+
+#formulario{
+	margin: 0 auto;
+	width: 60%;
+	padding: 30px;
+	padding-top: 15px;
+	background-color: #262626;
+	}
+
+.form{
+	width: 100%;
+}
+	
+.menu ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
-	background-color: #111;
+	background-color: #ffc42f;
 	overflow: hidden;
 	}
 
-li {
+.menu li {
 	float: left;
 	}
 
-li a{
+.menu li a{
 	display: block;
-	color: white;
+	color: black;
 	text-align: center;
 	padding: 14px 16px;
 	text-decoration: none;
@@ -59,52 +116,15 @@ li a{
 
 li a:hover {
 	background-color: #2A2A2A;
+	color: white;
 	}
-
-#menu{
-	font-family: 'PT Sans Narrow', sans-serif;
-	position: fixed;
-	right: 0;
-
-    margin-top:auto;
-    margin-bottom: auto;
-    }
-
-body{
-	font-family: 'Ubuntu', sans-serif;
-	background-color: black;
-	margin: 0 auto;
-	color: white;
-	font-family: 'Ubuntu', sans-serif;
-}
- 
-#contenido{
-	background-color: #0d0d0d;
-	margin: 0 auto;
-	width: 80%;
-	padding: 30px;
-}
-
-#footer{	
-	font-family: 'Roboto', sans-serif;
-	background-color: #070707;
-	color: white;
-	text-align: center;
-}
-
-h2{
-	font-family: 'Roboto', sans-serif;
-	text-align: center;
-}
 
 h1{	
 	padding-top: 25px;
 	font-family: 'Roboto', sans-serif;
-}
+	}
 
-#formulario{
-	margin: 0 auto;
-	width: 60%;
-	padding: 15px;
-	background-color: #262626;
-}
+h2{
+	font-family: 'Roboto', sans-serif;
+	text-align: center;
+	}

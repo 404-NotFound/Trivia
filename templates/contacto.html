@@ -1,8 +1,8 @@
-<!DOCTYPE html>
-<head>
-
-</head>
-<body>
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
 	<div id="formulario">
 		<h1>Contacto:</h1>
 		<form>
@@ -17,4 +17,4 @@
 			<input type="submit" name="enviar" value="Enviar" onclick="alert('Gracias por contactarte con nosotros.')">
 		</form>
 	</div>
-</body>
+{% endblock %}
