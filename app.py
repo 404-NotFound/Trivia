@@ -4,7 +4,6 @@ from flask import Flask, render_template, redirect, url_for
 
 app = Flask(__name__)
 
-#ESTA RUTA ES PARA PROBAR LA BASE! 
 @app.route('/')
 def trivia_():
     return redirect(url_for('trivia_inicio'))
@@ -19,11 +18,11 @@ def trivia_categorias():
 
 @app.route('/trivia/<int:id_categoria>/pregunta')
 def trivia_pregunta(id_categoria):
-    return render_template("pregunta.html",id_categoria)
+    return render_template("pregunta.html",nombre_categoria="Nombre de categoria")
 
 @app.route('/trivia/<int:id_categoria>/resultado/<int:id_respuesta>')
 def trivia_resultado(id_categoria,id_respuesta):
-    return render_template("resutlaado.html",id_categoria,id_respuesta)
+    return render_template("resultado.html")
 
 @app.route('/trivia/fin')
 def trivia_fin():
