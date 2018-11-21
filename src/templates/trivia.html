@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+	<div>
+		<h1>Trivia:</h1>
+		<a href= "{{ url_for('trivia_categorias') }}">JUGAR</a>
+	</div>
+{% endblock %}
