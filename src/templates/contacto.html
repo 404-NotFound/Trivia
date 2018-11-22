@@ -5,15 +5,15 @@
 {% block content %}
 	<div id="formulario">
 		<h1>Contacto:</h1>
-		<form>
+		<form method='post'>
 			Nombre:<br>
-			<input type="text" name="nombre" class="form" autofocus><br>
+			<input type="text" id="nombre" name="nombre" class="form" autofocus><br>
 			Email:<br>
-			<input type="text" name="mail" class="form"><br>
+			<input type="text" id="mail" name="mail" class="form"><br>
 			Asunto:<br>
-			<input type="text" name="asunto" class="form"><br>
+			<input type="text" id="asunto" name="asunto" class="form"><br>
 			Mensaje:<br>
-			<textarea name="mensaje" rows="18" class="form"></textarea><br>
+			<textarea name="mensaje" id="mensaje" rows="18" class="form"></textarea><br>
 			<input type="submit" name="enviar" value="Enviar" onclick="alert('Gracias por contactarte con nosotros.')">
 		</form>
 	</div>
