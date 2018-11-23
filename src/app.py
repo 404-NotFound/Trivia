@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
+from flask import send_from_directory
 from flask import Flask, request, render_template, redirect, url_for
 from models.trivia import db, Categoria, Pregunta, Respuesta
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///models/trivia.db'
 db= SQLAlchemy(app)
@@ -49,3 +50,7 @@ def trivia_nosotros():
 @app.route('/contacto')
 def trivia_contacto():
     return render_template("contacto.html")
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path,'static'),'favicon/favicon.ico', mimetype='image/vnd.microsoft.icon')

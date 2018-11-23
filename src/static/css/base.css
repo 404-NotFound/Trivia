@@ -43,7 +43,6 @@ html, body{
 	
 #container {
 	background-color: black;
-	color: white;
 	position: relative;
 	min-height: 100vh;
     overflow: auto;
@@ -57,6 +56,7 @@ html, body{
     }
     
 #content{
+	color: white;
 	width: 80%;
 	margin: 0 auto;
 	background-color: #2a2a2a;
@@ -80,6 +80,7 @@ html, body{
 	background-color: #1e1e1e;
 	font-family: 'Roboto', sans-serif;
 	text-align: center;
+	color: #FFFFFFB3;
 }
 
 #formulario{
@@ -127,4 +128,33 @@ h1{
 h2{
 	font-family: 'Roboto', sans-serif;
 	text-align: center;
+	}
+	
+#categorias{
+	padding-left: 10%;
+	padding-right: 10%;
+}
+
+.categorias ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	background-color: #ffc42f;
+	}
+
+.categorias li {
+	float: center;
+	}
+
+.categorias li a{
+	display: block;
+	color: black;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	}
+
+.categorias li a:hover {
+	background-color: #2A2A2A;
+	color: white;
 	}
