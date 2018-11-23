@@ -114,7 +114,7 @@ html, body{
 	text-decoration: none;
 	}
 
-li a:hover {
+.menu li a:hover {
 	background-color: #2A2A2A;
 	color: white;
 	}

@@ -5,11 +5,9 @@
 {% block content %}
 	<div>
 		<h1>Categorias:</h1>
-		<ul>
-			{% for categoria in categorias %}
-			<li><a href= "{{ url_for('trivia_pregunta') }}">"{{ nombre_categoria }}"</a></li>
-			<hr>
-			{% endfor %}
-		</ul>
+		{% for categoria in lista_categorias %}
+			<h2><a href="{{ categoria.url }}">{{ categoria.nombre }}</a><h2>
+			<br>
+		{% endfor %}
 	</div>
 {% endblock %}

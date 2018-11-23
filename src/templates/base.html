@@ -16,12 +16,12 @@
 	<meta name="msapplication-TileImage" content="/static/favicon/mstile-144x144.png">
 	<meta name="msapplication-config" content="/static/favicon/browserconfig.xml">
 	<meta name="theme-color" content="#da532c">
+	<!-- CONFIGURACION DE .CSS -->
+	<link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/base.css') }}">
+	<link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow|Ubuntu" rel="stylesheet"> 
 	<!-- HEADER -->
 	{% block header %}
 	{% endblock %}
-	<!-- CONFIGURACION DE .CSS -->
-	<link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/estilo.css') }}">
-	<link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow|Ubuntu" rel="stylesheet"> 
 </head>
 <body>
 	<div id="container" class="row">
