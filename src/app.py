@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from flask import Flask, request, render_template, redirect, url_for
-from models.trivia import db, Categorias, Preguntas, Respuestas
+from models.trivia import db, Categoria, Pregunta, Respuesta
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)

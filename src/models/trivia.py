@@ -7,20 +7,24 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///trivia.db'
 db= SQLAlchemy(app)
 
-class Categorias(db.Model):
+class Categoria(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(150), unique=True, nullable=False)
+    pregunta = db.relationship('Pregunta', backref='categoria',lazy='dynamic')
     def __repr__(self):        
         return '<Categoria: %s>' % self.nombre
     
-class Preguntas(db.Model):
+class Pregunta(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(150), unique=True, nullable=False)
+    categoria_id = db.Column(db.Integer, db.ForeignKey('categoria.id'))
+    respuestas = db.relationship('Respuesta', backref='pregunta',lazy='dynamic')
     def __repr__(self):        
         return '<Pregunta: %s>' % self.text
-    
-class Respuestas(db.Model):
+
+class Respuesta(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(150), unique=True, nullable=False)
+    pregunta_id = db.Column(db.Integer, db.ForeignKey('pregunta.id'))
     def __repr__(self):        
         return '<Respuesta: %s>' % self.text
