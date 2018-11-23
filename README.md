@@ -6,5 +6,5 @@ Proyecto final para Jovenes A Programar 2018
 
 # Integrantes:
 Matias Mutter, 
-Jeronimo Gomez, 
+Geronimo Gomez, 
 Florencia Britos
