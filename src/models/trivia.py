@@ -25,6 +25,7 @@ class Pregunta(db.Model):
 class Respuesta(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(150), unique=True, nullable=False)
+    es_correcta = db.Column(db.Boolean, unique=False, nullable=False)
     pregunta_id = db.Column(db.Integer, db.ForeignKey('pregunta.id'))
     def __repr__(self):        
         return '<Respuesta: %s>' % self.text
