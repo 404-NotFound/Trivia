@@ -26,14 +26,14 @@ def trivia_categorias():
     for categoria in todas_categorias:
         lista_categorias.append({
             "nombre":categoria.nombre,
-            "url":url_for('trivia_pregunta',id_categoria=categoria.id,categoria=categoria.nombre)
+            "url":url_for('trivia_pregunta',id_categoria=categoria.id)
             })
     return render_template("categorias.html",lista_categorias=lista_categorias)
 
 @app.route('/trivia/<int:id_categoria>/pregunta')
 def trivia_pregunta(id_categoria):
     categoria=""
-    return render_template("pregunta.html",categoria=categoria,pregunta="")
+    return render_template("pregunta.html",nombre_categoria=categoria,pregunta="")
 
 @app.route('/trivia/<int:id_categoria>/resultado/<int:id_respuesta>')
 def trivia_resultado(id_categoria,id_respuesta):
