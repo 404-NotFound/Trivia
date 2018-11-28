@@ -3,8 +3,11 @@
     {{ super() }}
 {% endblock %}
 {% block content %}
-	<div>
-		<h1>Trivia:</h1>
-		<h2><a href= "{{ url_for('trivia_categorias') }}">JUGAR</a></h2>
+	<h1>Trivia:</h1>
+	<div class="opciones">
+		<ul>
+				<li><h2><a href= "{{ url_for('trivia_categorias') }}">JUGAR</a></h2></li>
+		</ul>
 	</div>
+	
 {% endblock %}

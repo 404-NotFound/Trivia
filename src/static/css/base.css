@@ -63,6 +63,8 @@ html, body{
 	font-family: 'Ubuntu', sans-serif;
 	padding: 30px;
 	padding-bottom:5%;
+	padding-left: 10%;
+	padding-right: 10%;
 	}
 	
 #spacer{
@@ -121,6 +123,7 @@ html, body{
 	}
 
 h1{	
+	text-align: center;
 	padding-top: 25px;
 	font-family: 'Roboto', sans-serif;
 	}
@@ -129,20 +132,15 @@ h2{
 	font-family: 'Roboto', sans-serif;
 	text-align: center;
 	}
-	
-#categorias{
-	padding-left: 10%;
-	padding-right: 10%;
-}
 
-.categorias ul {
+.opciones ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
 	background-color: #75006c;
 	}
 
-.categorias li a{
+.opciones li a{
 	color: white;
 	display: block;
 	text-align: center;
@@ -150,7 +148,7 @@ h2{
 	text-decoration: none;
 	}
 
-.categorias li a:hover {
+.opciones li a:hover {
 	background-color: #ffc42f;
 	color: black;
 	}

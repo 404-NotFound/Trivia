@@ -3,14 +3,12 @@
     {{ super() }}
 {% endblock %}
 {% block content %}
-	<div id='categorias'>
-		<h1>Categorias:</h1>
-		<div class="categorias">
-			<ul>
-				{% for categoria in lista_categorias %}
-					<li><a id='categ_link' href="{{ categoria.url }}">{{ categoria.nombre }}</a></li>
-				{% endfor %}
-			</ul>
-		</div>
+	<h1>Categorias:</h1>
+	<div class="opciones">
+		<ul>
+			{% for categoria in lista_categorias %}
+				<li><a id='categ_link' href="{{ categoria.url }}">{{ categoria.nombre }}</a></li>
+			{% endfor %}
+		</ul>
 	</div>
 {% endblock %}
