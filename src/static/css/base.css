@@ -109,7 +109,7 @@ html, body{
 
 .menu li a{
 	display: block;
-	color: black;
+	color: #2A2A2A;
 	text-align: center;
 	padding: 14px 16px;
 	text-decoration: none;
@@ -139,22 +139,18 @@ h2{
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
-	background-color: #ffc42f;
-	}
-
-.categorias li {
-	float: center;
+	background-color: #75006c;
 	}
 
 .categorias li a{
+	color: white;
 	display: block;
-	color: black;
 	text-align: center;
 	padding: 14px 16px;
 	text-decoration: none;
 	}
 
 .categorias li a:hover {
-	background-color: #2A2A2A;
-	color: white;
+	background-color: #ffc42f;
+	color: black;
 	}
