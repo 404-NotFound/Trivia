@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+
+    <!-- Beinvenida -->
+    <header class="masthead bg-primary text-white text-center">
+      <div class="container">
+        <img class="img-fluid mb-5 d-block mx-auto" src="{{ url_for('static', filename='img/profile.png') }}" alt="">
+        <h1 class="text-uppercase mb-0">Bienvenido a Trivia!</h1>
+        <hr class="star-light">
+        <h2 class="font-weight-light mb-0">Desafiamos tus conocimientos</h2>
+      </div>
+    </header>
+
+    <!-- Jugar Grid Section -->
+    <section class="portfolio" id="jugar">
+      <div class="container">
+        
+		<h2 class="text-center text-uppercase text-secondary mb-0">Jugar</h2>
+		<hr class="star-dark mb-5">
+		<br>
+		<h2 class="text-center font-weight-light mb-5">Supera nuestro desafío</h2>
+		<p class='lead text-center mb-5'>Para ganar la trivia deberás acertar por lo menos una pregunta de cada categoría
+		<br>¿Te atreves?</p><br>
+		<div class="text-center mt-4">
+		  <a class="btn btn-xl btn-primary" href="{{ url_for('trivia_categorias') }}#jugar">
+		    <i class="fas fa-download mr-2"></i>
+		    Empecemos!
+		  </a>
+		</div>
+		<br><br><br><br>
+
+      </div>
+    </section>
+	
+{% endblock %}

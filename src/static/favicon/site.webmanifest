@@ -36,19 +36,10 @@
             "src": "/static/favicon/android-chrome-256x256.png",
             "sizes": "256x256",
             "type": "image/png"
-        },
-        {
-            "src": "/static/favicon/android-chrome-384x384.png",
-            "sizes": "384x384",
-            "type": "image/png"
-        },
-        {
-            "src": "/static/favicon/android-chrome-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
         }
     ],
-    "theme_color": "#da532c",
-    "background_color": "#da532c",
-    "display": "standalone"
+    "theme_color": "#e9db00",
+    "background_color": "#e9db00",
+    "display": "standalone",
+    "orientation": "portrait"
 }
