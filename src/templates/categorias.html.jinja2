@@ -19,14 +19,24 @@
 			     <div class="col-md-6 col-lg-4">
 			       <a class="portfolio-item d-block mx-auto" href="#categoria-{{ categoria.nombre }}">
 			         <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
-			           <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">
-			             <i class="fas fa-search-plus fa-3x"></i><h1>{{ categoria.nombre }}</h1>
+			           <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">						
+			            <i class="fas fa-dice-{{ ['one','two','three','four','five','six']|random }} fa-3x"></i><h1>{{ categoria.nombre }}</h1>
 			           </div>
 			         </div>
 			         <img class="img-fluid" src="{{ url_for('static', filename='img/categorias/') }}{{ categoria.nombre }}.png" alt="">
 			       </a>
 			     </div>
 			{% endfor %}
+		     <div class="col-md-6 col-lg-4">
+		       <a class="portfolio-item d-block mx-auto" href="#categoria-{{ (lista_categorias|random).nombre }}">
+		         <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+		           <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">						
+		            <i class="fas fa-question fa-3x"></i><h1>Al azar</h1>
+		           </div>
+		         </div>
+		         <img class="img-fluid" src="{{ url_for('static', filename='img/categorias/Random.png') }}" alt="">
+		       </a>
+		     </div>
 		</div>
 		
 	    <!-- Categorias Modals -->
@@ -42,17 +52,21 @@
 		              <h2 class="text-secondary text-uppercase mb-0">{{ categoria.nombre }}</h2>
 		              <hr class="star-dark mb-5">
 		              <img class="img-fluid mb-5" src="{{ url_for('static', filename='img/categorias/') }}{{ categoria.nombre }}.png" alt="">
-		              <p class="mb-5">Datos de la categoria BLABLABLABLBALBAL.</p>
+		              <p class=" mb-5">
+						<a class="btn-light" href="#">
+		                <i class="fas fa-info-circle btn-secoundary-light"></i></a>
+		                Responde correctamente una pregunta de cada categoría para ganar una <i>Trivia 
+		                <a class="btn-secoundary" href="#">
+		                <i class="far fa-star btn-secoundary-light"></i></a>.</i></p>
 		              <a class="btn btn-xl btn-primary" href="{{ categoria.url }}">
-					    <i class="fas fa-download mr-2"></i>
 					    Comenzar categoría!
 					  </a>
 					  <br>
 					  <br>
 					  <br>
-		              <a class="btn btn-link btn-lg rounded-pill portfolio-modal-dismiss" href="#">
+		              <a class="btn btn-light btn-lg rounded-pill portfolio-modal-dismiss" href="#">
 		                <i class="fa fa-close"></i>
-		                Salir</a>
+		                Atrás</a>
 		            </div>
 		          </div>
 		        </div>

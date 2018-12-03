@@ -4,10 +4,9 @@
 import os
 from flask import send_from_directory
 '''
-from flask import Flask, request, render_template, redirect, url_for
-from models.trivia import db, Categoria, Pregunta, Respuesta
+from flask import Flask, render_template, redirect, url_for
+from models.trivia import Categoria, Pregunta, Respuesta
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql.expression import func, select
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -48,9 +47,3 @@ def trivia_resultado(id_categoria,id_respuesta):
 @app.route('/trivia/fin')
 def trivia_fin():
     return render_template("fin.html.jinja2")
-
-'''
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path,'static'),'favicon/favicon.ico', mimetype='image/vnd.microsoft.icon')
-'''
