@@ -15,6 +15,7 @@
 		<hr class="star-dark mb-5">
 		<br>
 		<div class="row">
+			<!-- Se muestran todas las categorias con un for -->
 			{% for categoria in lista_categorias %}
 			     <div class="col-md-6 col-lg-4">
 			       <a class="portfolio-item d-block mx-auto" href="#categoria-{{ categoria.nombre }}">
@@ -27,6 +28,7 @@
 			       </a>
 			     </div>
 			{% endfor %}
+			<!-- Categoria al final de la lista Al azar -->
 		     <div class="col-md-6 col-lg-4">
 		       <a class="portfolio-item d-block mx-auto" href="#categoria-{{ (lista_categorias|random).nombre }}">
 		         <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
@@ -52,18 +54,16 @@
 		              <h2 class="text-secondary text-uppercase mb-0">{{ categoria.nombre }}</h2>
 		              <hr class="star-dark mb-5">
 		              <img class="img-fluid mb-5" src="{{ url_for('static', filename='img/categorias/') }}{{ categoria.nombre }}.png" alt="">
-		              <p class=" mb-5">
+		              <p class="mb-5">
 						<a class="btn-light" href="#">
 		                <i class="fas fa-info-circle btn-secoundary-light"></i></a>
 		                Responde correctamente una pregunta de cada categoría para ganar una <i>Trivia 
 		                <a class="btn-secoundary" href="#">
-		                <i class="far fa-star btn-secoundary-light"></i></a>.</i></p>
-		              <a class="btn btn-xl btn-primary" href="{{ categoria.url }}">
+		                <i class="far fa-star btn-secoundary-light"></i></a>.</i>
+		              </p>
+		              <a class="btn btn-xl btn-primary" href="{{ categoria.url }}#jugar">
 					    Comenzar categoría!
-					  </a>
-					  <br>
-					  <br>
-					  <br>
+					  </a><br><br><br>
 		              <a class="btn btn-light btn-lg rounded-pill portfolio-modal-dismiss" href="#">
 		                <i class="fa fa-close"></i>
 		                Atrás</a>

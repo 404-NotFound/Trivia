@@ -21,6 +21,10 @@ def trivia_():
 def trivia_inicio():
     return render_template("index.html.jinja2")
 
+@app.route('/trivia/')
+def trivia_inicio2():
+    return redirect(url_for('trivia_inicio'))
+
 @app.route('/trivia/categorias')
 def trivia_categorias():
     todas_categorias=Categoria.query.all()
