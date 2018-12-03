@@ -1,10 +1,10 @@
 # Trivia
 Proyecto final para Jovenes A Programar 2018
 
-# Equipo:
+# Equipo
 404_NotFound
 
-# Integrantes:
+# Integrantes
 Matias Mutter, 
 Geronimo Gomez, 
 Florencia Britos
