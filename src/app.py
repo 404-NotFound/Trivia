@@ -20,7 +20,7 @@ def trivia_():
 
 @app.route('/trivia')
 def trivia_inicio():
-    return render_template("index.html")
+    return render_template("index.html.jinja2")
 
 @app.route('/trivia/categorias')
 def trivia_categorias():
@@ -32,22 +32,22 @@ def trivia_categorias():
             "nombre":categoria.nombre,
             "url":url_for('trivia_pregunta',id_categoria=categoria.id)
             })
-    return render_template("categorias.html",lista_categorias=lista_categorias)
+    return render_template("categorias.html.jinja2",lista_categorias=lista_categorias)
 
 @app.route('/trivia/<int:id_categoria>/pregunta')
 def trivia_pregunta(id_categoria):
     consulta= Categoria.query.filter_by(id=id_categoria).first()
     categoria=consulta.nombre
     pregunta=""
-    return render_template("pregunta.html",nombre_categoria=categoria,pregunta=pregunta)
+    return render_template("pregunta.html.jinja2",nombre_categoria=categoria,pregunta=pregunta)
 
 @app.route('/trivia/<int:id_categoria>/resultado/<int:id_respuesta>')
 def trivia_resultado(id_categoria,id_respuesta):
-    return render_template("resultado.html")
+    return render_template("resultado.html.jinja2")
 
 @app.route('/trivia/fin')
 def trivia_fin():
-    return render_template("fin.html")
+    return render_template("fin.html.jinja2")
 
 '''
 @app.route('/favicon.ico')
