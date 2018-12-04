@@ -234,7 +234,7 @@ db.session.add(r_deporte_3_3)
 #                   HISTORIA:                   #
 #===============================================#
 
-p_historia_1 = Pregunta(text='Qúe país fue dirigido por Stalin', categoria=c_historia)
+p_historia_1 = Pregunta(text='Que país fue dirigido por Stalin', categoria=c_historia)
 r_historia_1 = Respuesta(text="Unión Soviética, URSS", es_correcta=True, pregunta=p_historia_1)
 r_historia_1_2 = Respuesta(text="Rusia", es_correcta=False, pregunta=p_historia_1)
 r_historia_1_3 = Respuesta(text="Stalingrado", es_correcta=False, pregunta=p_historia_1)

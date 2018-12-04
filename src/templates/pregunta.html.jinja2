@@ -12,14 +12,11 @@
 	      
 			<h2 class="text-center text-uppercase text-secondary mb-3">Pregunta</h2>
 			<hr class="star-dark mb-5">
-			
 			<h1 class="lead font-weight-light mb-4">{{ nombre_categoria }}</h1>
-			
 			<h2 class="font-weight-normal mb-5">¿{{ pregunta }}?</h2>
-			<p>&#10004; &#10008;</p>
 			
 			{% for respuesta in respuestas %}
-				<p>{{ respuesta.text }}</p>
+				<a class="btn btn-xl btn-outline-info btn-block" href="{{ respuesta.url }}#jugar">{{ respuesta.text }}</a>
 			{% endfor %}
       </div>
     </section>

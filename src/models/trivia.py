@@ -17,7 +17,7 @@ class Categoria(db.Model):
 class Pregunta(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(150), unique=True, nullable=False)
-    categoria_id = db.Column(db.Integer, db.ForeignKey('categoria.id'))
+    id_categoria = db.Column(db.Integer, db.ForeignKey('categoria.id'))
     respuestas = db.relationship('Respuesta', backref='pregunta',lazy='dynamic')
     def __repr__(self):        
         return '<Pregunta: %s>' % self.text
@@ -26,6 +26,6 @@ class Respuesta(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(150), unique=False, nullable=False)
     es_correcta = db.Column(db.Boolean, unique=False, nullable=False)
-    pregunta_id = db.Column(db.Integer, db.ForeignKey('pregunta.id'))
+    id_pregunta = db.Column(db.Integer, db.ForeignKey('pregunta.id'))
     def __repr__(self):        
         return '<Respuesta: %s>' % self.text

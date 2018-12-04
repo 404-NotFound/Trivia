@@ -3,7 +3,28 @@
     {{ super() }}
 {% endblock %}
 {% block content %}
-	<div>
-		<h1>Resultado:</h1>
-	</div>
+	
+	<!-- Preguntas Grid Section -->
+    <br><br><br><br><br>
+    <section class="portfolio" id="jugar">
+    <br><br><br>
+      <div class="container text-center">
+	      
+			<h2 class="text-center text-uppercase text-secondary mb-3">Resultado</h2>
+			<hr class="star-dark mb-5">
+			<h1 class="lead font-weight-light mb-4">¿{{ pregunta }}?</h1>
+			<h2 class="font-weight-normal mb-5">{{ resultado }}</h2>
+			
+			{% for respuesta in respuestas %}
+				{%- if resultado is sameas true -%}
+					<a class="btn btn-xl btn-outline-info btn-block" href="#">{{ respuesta.text }} &#10004;</a>
+				{% else %}
+					<a class="btn btn-xl btn-outline-info btn-block" href="#">{{ respuesta.text }} &#10008;</a>
+				{% endif %}
+			{% endfor %}
+			
+			
+      </div>
+    </section>
+		
 {% endblock %}
