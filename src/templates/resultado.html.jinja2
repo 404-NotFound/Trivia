@@ -13,13 +13,41 @@
 			<h2 class="text-center text-uppercase text-secondary mb-3">Resultado</h2>
 			<hr class="star-dark mb-5">
 			<h1 class="lead font-weight-light mb-4">¿{{ pregunta }}?</h1>
-			<h2 class="font-weight-normal mb-5">{{ resultado }}</h2>
+			<h2 class="font-weight-normal mb-5">
+				{%- if resultado is sameas true -%}
+					<a class="btn btn-lg btn-success" href="{{ url_gano }}">
+						{{ ['MUY BIÉN','EXCELENTE','BIEN','CORRECTO','IMPECABLE','ESO ÉS','GENIAL','ACERTADO','SÍ!','ASÍ SE HACE']|random }}!  
+						{{ ['&#128578;','&#128512;','&#128513;','&#128515;','&#128516;','&#128522;','&#128526;','&#128525;','&#128536;','&#128539;','&#128521;']|random }}
+					</a>
+				{% else %}
+					<a class="btn btn-lg btn-danger" href="{{ url_perdio }}">
+						{{ ['FALLASTE!','MAL','ERROR','SUERTE LA PRÓXIMA','MUY MAL','INCORRECTO','EQUIVOCADO','NO!','NO TE RINDAS']|random }}!  
+						{{ ['&#128528;','&#128529;','&#128533;','&#128542;','&#128543;','&#128559;','&#128557;','&#128555;','&#128546;','&#128561;','&#128580;']|random }}
+					</a>
+				{% endif %}
+			</h2>
 			
 			{% for respuesta in respuestas %}
-				{%- if resultado is sameas true -%}
-					<a class="btn btn-xl btn-outline-info btn-block" href="#">{{ respuesta.text }} &#10004;</a>
+				{% if respuesta.es_correcta is sameas true %}
+					{% if relegida == respuesta.text %}
+						<button type="button" class="btn btn-lg btn-success btn-block" disabled>
+								{{ respuesta.text }} &#10004;
+						</button>
+					{% else %}
+						<button type="button" class="btn btn-lg btn-success btn-block" disabled>
+								{{ respuesta.text }}
+						</button>
+					{% endif %}
 				{% else %}
-					<a class="btn btn-xl btn-outline-info btn-block" href="#">{{ respuesta.text }} &#10008;</a>
+					{% if relegida == respuesta.text %}
+						<button type="button" class="btn btn-lg btn-danger btn-block" disabled>
+							{{ respuesta.text }} &#10008;
+						</button>
+					{% else %}
+						<button type="button" class="btn btn-lg btn-danger btn-block" disabled>
+							{{ respuesta.text }}
+						</button>
+					{% endif %}
 				{% endif %}
 			{% endfor %}
 			

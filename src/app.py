@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-from flask import Flask,render_template,redirect,url_for
+#import os
+from flask import Flask,render_template,redirect,url_for,request,session
 from models.trivia import Categoria,Pregunta,Respuesta
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql.expression import func
+from sqlalchemy.sql.expression import func, null
+import time
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'e5ac358cf0bf-11e5-9e39-d3b532c10a28' #or os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///models/trivia.db'
 db= SQLAlchemy(app)
@@ -25,6 +27,13 @@ def trivia_inicio2():
 
 @app.route('/trivia/categorias')
 def trivia_categorias():
+    if session.get('ti')==None :
+        print('EMPIEZA-------')
+        session['ti']=time.time()
+        session['online']=True
+        session['game_status']={}
+    else:
+        print('SIGUE---------')
     
     #LE PIDO TODAS LAS CATEGORIAS A Categorias
     todas_categorias=Categoria.query.all()
@@ -72,29 +81,38 @@ def trivia_pregunta(id_categoria):
 @app.route('/trivia/<int:id_categoria>/resultado/<int:id_respuesta>')
 def trivia_resultado(id_categoria,id_respuesta):
     
-    #BUSCO LA Respuesta CON LA ID 
-    respuesta=Respuesta.query.filter_by(id=id_respuesta).first()
+    #BUSCO LA Respuesta ELEGIDA CON LA ID 
+    respuesta_e=Respuesta.query.filter_by(id=id_respuesta).first()
     
     #CON LA RESPUESTA BUSCO CUAL ES LA PREGUNTA
-    pregunta=Pregunta.query.filter_by(id=respuesta.id_pregunta).first()
+    pregunta=Pregunta.query.filter_by(id=respuesta_e.id_pregunta).first()
     
     #PIDO LAS 3 RESPUESTAS PARA LA PREGUNTA ELEGIDA POR ORDEN DECRECIENTE/CRECIENTE
-    respuestas=Respuesta.query.filter_by(id_pregunta=pregunta.id).order_by(Respuesta.es_correcta).all()
+    respuestas=Respuesta.query.filter_by(id_pregunta=pregunta.id).order_by("Respuesta.es_correcta desc").all()
     
     #DECLARO lista_respuestas QUE POR CADA RESPUESTA TIENE UN DIC: {'text':<RESPUESTA>,'es_correcta':<True O False>,'url':<RUTA>}
     lista_respuestas=[]
     for respuesta in respuestas:
         lista_respuestas.append({
+            "id":respuesta.id,
             "text":respuesta.text,
             "es_correcta":respuesta.es_correcta
             })
-
+        
+    url_perdio=url_for('trivia_pregunta',id_categoria=id_categoria)
+    url_gano=url_for('trivia_categorias')
+        
     return render_template("resultado.html.jinja2",
                            pregunta=pregunta.text,
                            respuestas=lista_respuestas,
-                           resultado=respuesta.es_correcta
+                           resultado=respuesta_e.es_correcta,
+                           relegida=respuesta_e.text,
+                           url_gano=url_gano,
+                           url_perdio=url_perdio
                            )
 
 @app.route('/trivia/fin')
-def trivia_fin():
+def trivia_fin(): 
+    tf=time.time()
+    duracion=session['ti']-tf
     return render_template("fin.html.jinja2")
