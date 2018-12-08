@@ -4,17 +4,31 @@
     {{ super() }}
 {% endblock %}
 {% block content %}
-   
+
+    <section class="masthead espacio">
+    </section>
+    
     <!-- Categorias Grid Section -->
-    <br><br><br><br><br>
     <section class="portfolio" id="jugar">
-    <br><br><br>
       <div class="container">
 
 		<h2 class="text-center text-uppercase text-secondary mb-0">Categorías</h2>
 		<hr class="star-dark mb-5">
 		<br>
 		<div class="row">
+		
+			<!-- Categoria al final de la lista Al azar -->
+		     <div class="col-md-6 col-lg-4">
+		       <a class="portfolio-item d-block mx-auto" href="#categoria-{{ (lista_categorias|random).nombre }}">
+		         <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+		           <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">						
+		            <i class="fas fa-question fa-3x"></i><h1>Al azar</h1>
+		           </div>
+		         </div>
+		         <img class="img-fluid" src="{{ url_for('static', filename='img/categorias/Random.png') }}" alt="">
+		       </a>
+		     </div>
+		     
 			<!-- Se muestran todas las categorias con un for -->
 			{% for categoria in lista_categorias %}
 			     <div class="col-md-6 col-lg-4">
@@ -28,17 +42,23 @@
 			       </a>
 			     </div>
 			{% endfor %}
-			<!-- Categoria al final de la lista Al azar -->
-		     <div class="col-md-6 col-lg-4">
-		       <a class="portfolio-item d-block mx-auto" href="#categoria-{{ (lista_categorias|random).nombre }}">
-		         <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
-		           <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">						
-		            <i class="fas fa-question fa-3x"></i><h1>Al azar</h1>
-		           </div>
-		         </div>
-		         <img class="img-fluid" src="{{ url_for('static', filename='img/categorias/Random.png') }}" alt="">
-		       </a>
-		     </div>
+			
+			<!-- Se muestran las categorias ganadas con un for -->
+			{% for ganada in lista_ganadas %}
+			     <div class="col-md-6 col-lg-4">
+			       <div class="portfolio-item d-block mx-auto">
+			         <div class="portfolio-item-ganado d-flex position-absolute h-100 w-100">
+			           <div class="portfolio-item-ganado-content my-auto w-100 text-center text-white">						
+			            <i class="fas fa-check-circle fa-3x"></i><h1>{{ ganada.nombre }}</h1>
+			           </div>
+			         </div>
+			         <img class="img-fluid" src="{{ url_for('static', filename='img/categorias/') }}{{ ganada.nombre }}.png" alt="">
+			       </div>
+			     </div>
+			{% endfor %}
+			
+			
+			
 		</div>
 		
 	    <!-- Categorias Modals -->
@@ -56,11 +76,11 @@
 		              <img class="img-fluid mb-5" src="{{ url_for('static', filename='img/categorias/') }}{{ categoria.nombre }}.png" alt="">
 		              <p class="mb-5">
 						<i class="fas fa-info-circle btn-secoundary-light"></i>
-		                Responde correctamente una pregunta de cada categoría para ganar una <i>Trivia </i>
-		                <a class="btn-secoundary" href="#"><i class="far fa-star btn-secoundary-light"></i></a>.
+		                Responde correctamente para avanzar a la siguiente categoria<br>Vamos el tiempo corre! 
+		                <a class="btn-secoundary" href="#"><i class="far fa-clock btn-secoundary-light"></i></a>
 		              </p>
-		              <a class="btn btn-xl btn-primary" href="{{ categoria.url }}#jugar">
-					    Comenzar categoría!
+		              <a class="btn btn-xl btn-primary" href="{{ categoria.url }}">
+					    &#127922; Empecemos !
 					  </a><br><br><br>
 		              <a class="btn btn-light btn-lg rounded-pill portfolio-modal-dismiss" href="#">
 		                <i class="fa fa-close"></i>

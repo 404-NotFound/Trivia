@@ -39,7 +39,7 @@ db.session.add(r_capital_1_3)
 
 p_capital_2 = Pregunta(text='Cuál es la capital de Argentina', categoria=c_geografia)
 r_capital_2 = Respuesta(text="Buenos Aires", es_correcta=True, pregunta=p_capital_2)
-r_capital_2_2 = Respuesta(text="Capital Federal", es_correcta=True, pregunta=p_capital_2)
+r_capital_2_2 = Respuesta(text="Argentina", es_correcta=False, pregunta=p_capital_2)
 r_capital_2_3 = Respuesta(text="Gran Buenos Aires", es_correcta=False, pregunta=p_capital_2)
 db.session.add(p_capital_2)
 db.session.add(r_capital_2)
@@ -234,7 +234,7 @@ db.session.add(r_deporte_3_3)
 #                   HISTORIA:                   #
 #===============================================#
 
-p_historia_1 = Pregunta(text='Qúe país fue dirigido por Stalin', categoria=c_historia)
+p_historia_1 = Pregunta(text='Que país fue dirigido por Stalin', categoria=c_historia)
 r_historia_1 = Respuesta(text="Unión Soviética, URSS", es_correcta=True, pregunta=p_historia_1)
 r_historia_1_2 = Respuesta(text="Rusia", es_correcta=False, pregunta=p_historia_1)
 r_historia_1_3 = Respuesta(text="Stalingrado", es_correcta=False, pregunta=p_historia_1)

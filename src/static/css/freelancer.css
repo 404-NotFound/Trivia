@@ -179,6 +179,7 @@ section h2 {
 
 header.masthead {
   padding-top: calc(6rem + 72px);
+  height:100vh;
   padding-bottom: 6rem;
 }
 
@@ -341,11 +342,11 @@ form .row:first-child .floating-label-form-group {
 }
 
 a {
-  color: #6b0363;
+  color: #e9db00;
 }
 
 a:focus, a:hover, a:active {
-  color: #128f76;
+  color: #fff125;
 }
 
 .btn {
@@ -386,4 +387,55 @@ a:focus, a:hover, a:active {
 .btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active {
   background-color: #1a252f;
   border-color: #1a252f;
+}
+
+.btn-outline-info {
+  color: #6b0363;
+  border-color: #e9db00;
+}
+
+.btn-outline-info:hover {
+  color: #fff;
+  background-color: #6b0363;
+  border-color: #e9db00;
+}
+
+.btn-outline-info:focus, .btn-outline-info.focus {
+  box-shadow: 0 0 0 0.2rem rgba(233, 219, 0, 0.5);
+}
+
+.btn-outline-info.disabled, .btn-outline-info:disabled {
+  color: #e9db00;
+}
+
+.btn-outline-info:not(:disabled):not(.disabled):active, .btn-outline-info:not(:disabled):not(.disabled).active,
+.show > .btn-outline-info.dropdown-toggle {
+  color: #fff;
+  background-color: #e9db00;
+  border-color: #e9db00;
+}
+
+.btn-outline-info:not(:disabled):not(.disabled):active:focus, .btn-outline-info:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-info.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(233, 219, 0, 0.5);
+}
+
+#jugar{
+	min-height: 100vh
+}
+
+.portfolio .portfolio-item .portfolio-item-ganado {
+  -webkit-transition: all ease 0.5s;
+  transition: all ease 0.5s;
+  opacity: 0;
+  background-color: rgba(117, 0, 108, 0.9);
+  opacity: 1;
+}
+
+.portfolio .portfolio-item .portfolio-item-ganado .portfolio-item-ganado-content {
+  font-size: 1.5rem;
+}
+
+.espacio {
+	padding-top: calc(6rem + 106px);
 }

@@ -1,9 +1,25 @@
 {% extends "base.html" %}
+{% block title %} - Fin{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
 {% block content %}
-	<div>
-		<h1>Fin:</h1>
-	</div>
+    
+    <section class="masthead espacio">
+    </section>
+    
+    <!-- Fin Grid Section -->
+    <section class="masthead portfolio" id="jugar">
+      <div class="container text-center">
+
+		<h2 class="text-center text-uppercase text-secondary mb-0">Fin</h2>
+		<hr class="star-dark mb-5">
+		<br>
+		<h1 class="font-weight-normal mb-5">Has ganado una Trivia! &#127942;</h1>
+		<h2 class="lead font-weight-light mb-4">Duración: 
+			<p class="text-warning">{{ tiempo }} <i class="far fa-clock btn-secoundary-light"></i></p> 
+		</h2>
+      </div>
+    </section>
+
 {% endblock %}

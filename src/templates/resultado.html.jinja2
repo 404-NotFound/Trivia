@@ -1,9 +1,99 @@
 {% extends "base.html" %}
+{% block title %} - Respuesta{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
 {% block content %}
-	<div>
-		<h1>Resultado:</h1>
-	</div>
+
+    <section class="masthead espacio">
+    </section>
+    
+	<!-- Resultado Grid Section -->
+    <section class="masthead portfolio" id="jugar">
+      <div class="container text-center">
+	      
+			<h2 class="text-center text-uppercase text-secondary mb-3">Resultado</h2>
+			<hr class="star-dark mb-5">
+			<h1 class="lead font-weight-light mb-4">¿{{ pregunta }}?</h1>
+			<h2 class="font-weight-normal mb-5">
+				{%- if resultado -%}
+					<a class="btn btn-lg btn-success" href="{{ url_gano }}">
+						{{ ['MUY BIÉN','EXCELENTE','BIEN','CORRECTO','IMPECABLE','ESO ÉS','GENIAL','ACERTADO','SÍ!','ASÍ SE HACE']|random }}!  
+						<!-- Diccionario de emoticones -->
+						{{ ['&#128578;','&#128512;','&#128513;','&#128515;','&#128516;','&#128522;','&#128526;','&#128525;','&#128536;','&#128539;','&#128521;']|random }}
+					</a>
+				{% else %}
+					<a class="btn btn-lg btn-danger" href="{{ url_perdio }}">
+						{{ ['FALLASTE!','MAL','ERROR','SUERTE LA PRÓXIMA','MUY MAL','INCORRECTO','EQUIVOCADO','NO!','NO TE RINDAS']|random }}!  
+						<!-- Diccionario de emoticones -->
+						{{ ['&#128528;','&#128529;','&#128533;','&#128542;','&#128543;','&#128559;','&#128557;','&#128555;','&#128546;','&#128561;','&#128580;']|random }}
+					</a>
+				{% endif %}
+			</h2>
+			
+			{% for respuesta in respuestas %}
+				{% if respuesta.es_correcta %}
+					{% if relegida == respuesta.text %}
+						<button type="button" class="btn btn-lg btn-success btn-block" disabled>
+								{{ respuesta.text }} &#10004;
+						</button>
+					{% else %}
+						<button type="button" class="btn btn-lg btn-success btn-block" disabled>
+								{{ respuesta.text }}
+						</button>
+					{% endif %}
+				{% else %}
+					{% if relegida == respuesta.text %}
+						<button type="button" class="btn btn-lg btn-danger btn-block" disabled>
+							{{ respuesta.text }} &#10008;
+						</button>
+					{% else %}
+						<button type="button" class="btn btn-lg btn-danger btn-block" disabled>
+							{{ respuesta.text }}
+						</button>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+			<br>
+			<row class="row justify-content-md-center">
+					<a class="portfolio-item centered" href="#rendirse">Volver a empezar</a>
+			</row>
+			
+			<!-- Volver a empezar Modal -->
+		    <div class="portfolio-modal mfp-hide" id="rendirse">
+		      <div class="portfolio-modal-dialog bg-white">
+		        <a class="close-button d-none d-md-block portfolio-modal-dismiss" href="#">
+		          <i class="fa fa-3x fa-times"></i>
+		        </a>
+		        <div class="container text-center">
+		          <div class="row">
+		            <div class="col-lg-8 mx-auto">
+		              <h2 class="text-secondary text-uppercase mb-0">Te rindes?</h2>
+		              <hr class="star-dark mb-5">
+		              
+		              <p class="mb-5 lead">
+						<i class="fas fa-info-circle btn-secoundary-light"></i>
+		                Si te rindes comenzaras de cero y perderas todas las categorias.<br><br>
+		                Duración:<br>
+		                <a class="btn-secoundary" href="#">{{ tiempo }} <i class="far fa-clock btn-secoundary-light"></i></a>
+		                
+		              </p>
+		              <a class="btn btn-xl btn-primary mb-4" href="{{ url_for('trivia_inicio') }}#jugar">
+					    &#128078; Si, me rindo
+					  </a><br>
+					  
+		              <a class="btn btn-light btn-lg rounded-pill portfolio-modal-dismiss" href="#">
+		                <i class="fa fa-close"></i>
+		                Atrás
+		              </a>
+		              
+		            </div>
+		          </div>
+		        </div>
+		      </div>
+		    </div>
+		
+      </div>
+    </section>
+		
 {% endblock %}
