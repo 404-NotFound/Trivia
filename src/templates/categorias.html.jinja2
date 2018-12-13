@@ -5,30 +5,21 @@
 {% endblock %}
 {% block content %}
 
-    <section class="masthead espacio">
-    </section>
+    <header class="espacio bg-primary text-white text-center">
+      <div class="container">
+      </div>
+    </header>
     
     <!-- Categorias Grid Section -->
     <section class="portfolio" id="jugar">
-      <div class="container">
-
+      <div class="container text-center">
+      
+	    <br>
 		<h2 class="text-center text-uppercase text-secondary mb-0">Categorías</h2>
 		<hr class="star-dark mb-5">
 		<br>
 		<div class="row">
-		
-			<!-- Categoria al final de la lista Al azar -->
-		     <div class="col-md-6 col-lg-4">
-		       <a class="portfolio-item d-block mx-auto" href="#categoria-{{ (lista_categorias|random).nombre }}">
-		         <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
-		           <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">						
-		            <i class="fas fa-question fa-3x"></i><h1>Al azar</h1>
-		           </div>
-		         </div>
-		         <img class="img-fluid" src="{{ url_for('static', filename='img/categorias/Random.png') }}" alt="">
-		       </a>
-		     </div>
-		     
+
 			<!-- Se muestran todas las categorias con un for -->
 			{% for categoria in lista_categorias %}
 			     <div class="col-md-6 col-lg-4">
@@ -42,7 +33,19 @@
 			       </a>
 			     </div>
 			{% endfor %}
-			
+					
+			<!-- Categoria de la lista Al azar -->
+		     <div class="col-md-6 col-lg-4">
+		       <a class="portfolio-item d-block mx-auto" href="#categoria-{{ (lista_categorias|random).nombre }}">
+		         <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+		           <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">						
+		            <i class="fas fa-question fa-3x"></i><h1>Al azar</h1>
+		           </div>
+		         </div>
+		         <img class="img-fluid" src="{{ url_for('static', filename='img/categorias/Random.png') }}" alt="">
+		       </a>
+		     </div>
+		     
 			<!-- Se muestran las categorias ganadas con un for -->
 			{% for ganada in lista_ganadas %}
 			     <div class="col-md-6 col-lg-4">
@@ -61,6 +64,8 @@
 			
 		</div>
 		
+		{% include 'volver.html.jinja2' %}
+		
 	    <!-- Categorias Modals -->
 		{% for categoria in lista_categorias %}	
 		    <div class="portfolio-modal mfp-hide" id="categoria-{{ categoria.nombre }}">
@@ -73,7 +78,9 @@
 		            <div class="col-lg-8 mx-auto">
 		              <h2 class="text-secondary text-uppercase mb-0">{{ categoria.nombre }}</h2>
 		              <hr class="star-dark mb-5">
+		              <a href="{{ categoria.url }}">
 		              <img class="img-fluid mb-5" src="{{ url_for('static', filename='img/categorias/') }}{{ categoria.nombre }}.png" alt="">
+		              </a>
 		              <p class="mb-5">
 						<i class="fas fa-info-circle btn-secoundary-light"></i>
 		                Responde correctamente para avanzar a la siguiente categoria<br>Vamos el tiempo corre! 
@@ -94,5 +101,8 @@
 	
       </div>
     </section>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script>$('#jugar')[0].scrollIntoView({behavior:"instant",block:"start"});</script>
 	
 {% endblock %}

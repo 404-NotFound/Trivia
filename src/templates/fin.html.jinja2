@@ -4,15 +4,18 @@
     {{ super() }}
 {% endblock %}
 {% block content %}
-    
-    <section class="masthead espacio">
-    </section>
+
+    <header class="espacio bg-primary text-white text-center">
+      <div class="container">
+      </div>
+    </header>
     
     <!-- Fin Grid Section -->
-    <section class="masthead portfolio" id="jugar">
+    <section class="portfolio" id="jugar">
       <div class="container text-center">
-
-		<h2 class="text-center text-uppercase text-secondary mb-0">Fin</h2>
+      
+	      	<br>
+		<h2 class="text-center text-uppercase text-secondary mb-0">Felicitaciones</h2>
 		<hr class="star-dark mb-5">
 		<br>
 		<h1 class="font-weight-normal mb-5">Has ganado una Trivia! &#127942;</h1>
@@ -20,6 +23,14 @@
 			<p class="text-warning">{{ tiempo }} <i class="far fa-clock btn-secoundary-light"></i></p> 
 		</h2>
       </div>
+      
+		<div class="text-center mt-4">
+		  <a class="btn btn-xl btn-primary" href="{{ url_for('trivia_inicio') }}">
+		    &#128075; Terminar
+		  </a>
+		</div>
     </section>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script>$('#jugar')[0].scrollIntoView({behavior:"instant",block:"start"});</script>
 {% endblock %}

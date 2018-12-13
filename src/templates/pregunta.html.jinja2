@@ -5,13 +5,16 @@
 {% endblock %}
 {% block content %}
 
-    <section class="masthead espacio">
-    </section>
+    <header class="espacio bg-primary text-white text-center">
+      <div class="container">
+      </div>
+    </header>
     
 	<!-- Preguntas Grid Section -->
-    <section class="masthead portfolio" id="jugar">
+    <section class="portfolio" id="jugar">
       <div class="container text-center">
-	      
+      
+	      	<br>
 			<h2 class="text-center text-uppercase text-secondary mb-3">Pregunta</h2>
 			<hr class="star-dark mb-5">
 			<h1 class="lead font-weight-light mb-4">{{ nombre_categoria }}</h1>
@@ -20,7 +23,12 @@
 			{% for respuesta in respuestas %}
 				<a class="btn btn-lg btn-outline-info btn-block" href="{{ respuesta.url }}">{{ respuesta.text }}</a>
 			{% endfor %}
+
+		{% include 'volver.html.jinja2' %}
+		
       </div>
     </section>
 		
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script>$('#jugar')[0].scrollIntoView({behavior:"instant",block:"start"});</script>
 {% endblock %}

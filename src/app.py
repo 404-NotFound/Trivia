@@ -6,8 +6,8 @@ from models.trivia import Categoria,Pregunta,Respuesta
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from sqlalchemy.sql.expression import func
-import time
 from datetime import datetime, timedelta
+import time
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'e5ac358cf0bf-11e5-9e39-d3b532c10a28' #or os.getenv('SECRET_KEY')
@@ -66,7 +66,12 @@ def trivia_categorias():
                 "url":url_for('trivia_pregunta',id_categoria=categoria.id)
                 })
     
-    return render_template("categorias.html.jinja2",lista_categorias=lista_categorias,lista_ganadas=lista_ganadas)
+    tiempo=tiempo_jugado(session['ti'])
+        
+    return render_template("categorias.html.jinja2",
+                           lista_categorias=lista_categorias,
+                           lista_ganadas=lista_ganadas,
+                           tiempo=tiempo)
 
 @app.route('/trivia/<int:id_categoria>/pregunta')
 def trivia_pregunta(id_categoria):
@@ -91,10 +96,13 @@ def trivia_pregunta(id_categoria):
             "url":(url_for('trivia_resultado',id_categoria=id_categoria,id_respuesta=respuesta.id))
             })
         
+        tiempo=tiempo_jugado(session['ti'])
+        
     return render_template("pregunta.html.jinja2",
                            nombre_categoria=nombre_categoria,
                            pregunta=pregunta.text,
-                           respuestas=lista_respuestas
+                           respuestas=lista_respuestas,
+                           tiempo=tiempo
                            )
 
 @app.route('/trivia/<int:id_categoria>/resultado/<int:id_respuesta>')

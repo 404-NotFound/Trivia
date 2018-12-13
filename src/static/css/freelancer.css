@@ -179,8 +179,8 @@ section h2 {
 
 header.masthead {
   padding-top: calc(6rem + 72px);
-  height:100vh;
   padding-bottom: 6rem;
+  min-height:100vh;
 }
 
 header.masthead h1 {
@@ -438,4 +438,8 @@ a:focus, a:hover, a:active {
 
 .espacio {
 	padding-top: calc(6rem + 106px);
+}
+
+.tamaño {
+	height:100vh;
 }
