@@ -21,11 +21,19 @@ def index():
 
 @app.route('/trivia')
 def trivia_inicio():
-    session.clear()
+    session.clear()#borrar
+    try:
+        if session['ti']:
+            session.pop('ti')
+            session.pop('cat_jugadas')
+            session.pop('tf')
+    except:
+        pass;
+        
     return render_template("index.html.jinja2",titulo="")
 
 @app.route('/trivia/')
-def trivia_inicio2():
+def trivia_inicio_():
     return redirect(url_for('trivia_inicio'))
 
 @app.route('/trivia/categorias')
@@ -34,8 +42,9 @@ def trivia_categorias():
     #LE PIDO TODAS LAS CATEGORIAS A Categorias
     todas_categorias=Categoria.query.all()
     
-    #CREO SESSION['ti']=<TIEMPO> SESSION['ID_CATEGORIA']=<TRUE O FALSE>
-    #GUARDO EN ELLA SI GANO O PERDIO CADA CATEGORIA Y EL TIEMPO QUE EMPEZO A JUGAR
+    #GUARDO SI GANO O NO CADA CATEGORIA Y EL TIEMPO EN QUE EMPEZO A JUGAR
+    #CREO SESSION['ti']=<TIEMPO>
+    #CREO SESSION['cat_jugadas'] (ES UNA LISTA DE DICC)
     try:
         #PRIMERO COMPRUEBO SI LA SESION YA EXISTE
         if session['ti']:
@@ -43,27 +52,39 @@ def trivia_categorias():
     except:
         #SI NO EXISTE CREO SESSION
         session['ti']=time.time()
+        #CREO UN DICC CON TODAS LAS CATEGORIAS {'1':False,'2':False,'3':False,'4':False,...}
         dicc = {}
         for cat in todas_categorias:
-            dicc[cat.id] = False
-            session[str(cat.id)] = False
+            dicc[str(cat.id)] = False
+        #GUARDO EN session['cat_jugadas'] EL DIC
+        session['cat_jugadas']=dicc
     
-    #DECLARO lista_ganadas QUE TIENE CADA CATEGORIA GANADA: {'nombre':<NOMBRE>}
-    lista_ganadas=[]
-    for ganada in todas_categorias:
-        if session[str(ganada.id)] == True:
-            lista_ganadas.append({
-                "nombre":ganada.nombre
-                })
-            
-    #DECLARO lista_categorias QUE POR CADA CATEGORIA TIENE UN DIC: {'nombre':<NOMBRE>,'url':<RUTA>}
-    lista_categorias=[]
+    print("-"*50)
+    for key in session.keys():
+        try:
+            print(str(session[key]))
+        except:
+            pass;
+    print("-"*50)
+    
+    #LE PASO AL TEMPLATE lista_categorias y lista_ganadas
+    lista_categorias=[]#  <--- CATEGORIAS SIN GANAR
+    lista_ganadas=[]#     <--- CATEGORIAS GANADAS
+    #PRIMERO RECORRO TODAS LAS CATEGORIAS
     for categoria in todas_categorias:
-        if session[str(categoria.id)] == False:
+        dicc_jugadas=session['cat_jugadas']
+        #SI LA CATEGORIA NO FUE GANADA LA GUARDO EN lista_categorias
+        if dicc_jugadas.get(str(categoria.id)) == False:
             lista_categorias.append({
                 "nombre":categoria.nombre,
-                #URL_FOR ARMA LA RUTA PARA: trivia_pregunta(id_categoria)
+                #URL_FOR ARMA LA RUTA HACIA LA PREGUNTA DE LA CATEGORIA
                 "url":url_for('trivia_pregunta',id_categoria=categoria.id)
+                })
+        #SI GANO LA CATEGORIA LA GUARDO EN lista_ganadas
+        if dicc_jugadas.get(str(categoria.id)) == True:
+            lista_ganadas.append({
+                "nombre":categoria.nombre
+                #lista_ganadas NO NECESITA URL PORQUE YA FUE GANADA
                 })
     
     tiempo=tiempo_jugado(session['ti'])
@@ -98,7 +119,6 @@ def trivia_pregunta(id_categoria):
             })
         
         tiempo=tiempo_jugado(session['ti'])
-        
     return render_template("pregunta.html.jinja2",
                            nombre_categoria=nombre_categoria,
                            pregunta=pregunta.text,
@@ -130,15 +150,22 @@ def trivia_resultado(id_categoria,id_respuesta):
         
     # esto es para setear en la session si acierta o no la pregunta
     for respuesta in respuestas:
-        if respuesta.es_correcta:
-            if respuesta.id == id_respuesta:
-                session[str(id_categoria)] = True
-     
+        if respuesta.es_correcta:#borrar#if respuesta.es_correcta && respuesta.id==id_respuesta:
+            if respuesta.id == id_respuesta:#borrar
+                #EN EL DIC 'cat_jugadas' ACTUALIZO LA CATEGORIA A True
+                dic=session['cat_jugadas']
+                dic.update({str(id_categoria):True})
+                session['cat_jugadas']=dic
+    
+    #ACA CUANDO EL JUGADOR GANA REDIRIGO EL FLUJO AL FINAL DEL JUEGO
     todas_categorias=Categoria.query.all()
     ganador = True
-    for c in todas_categorias:
-        if session[str(c.id)] == False:
+    #PRIMERO RECORRO TODAS LAS CATEGORIAS
+    for cat in todas_categorias:
+        #SI ALGUNA CATEGORIA ES FALSE ganador = False
+        if session['cat_jugadas'].get(str(cat.id)) == False:
             ganador = False
+    #SI GANADOR SIGUE EN True REDIRIGO AL TEMPLATE FINAL
     if ganador==True:
         return redirect(url_for('trivia_fin'))
     
@@ -163,7 +190,6 @@ def trivia_resultado(id_categoria,id_respuesta):
 def trivia_fin():
     #LA FUNCION TIEMPO JUGADO DEVUELVE LA RESTA DE TI-TF FORMATEADA EN TEXTO
     tiempo=tiempo_jugado(session['ti'])
-    
     return render_template("fin.html.jinja2", tiempo=tiempo, titulo=" - Fin")
 
 @app.route('/favicon.ico')

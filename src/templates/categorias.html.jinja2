@@ -34,8 +34,8 @@
 			     </div>
 			{% endfor %}
 			
+			<!-- Categoria de la lista Al azar -->
 		    {% if lista_categorias|length > 1 %}
-				<!-- Categoria de la lista Al azar -->
 			     <div class="col-md-6 col-lg-4">
 			       <a class="portfolio-item d-block mx-auto" href="#categoria-{{ (lista_categorias|random).nombre }}">
 			         <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
@@ -52,7 +52,7 @@
 			<!-- Se muestran las categorias ganadas con un for -->
 			{% for ganada in lista_ganadas %}
 			     <div class="col-md-6 col-lg-4">
-			       <div class="portfolio-item d-block mx-auto">
+			       <div class="portfolio-item" href="#">
 			         <div class="portfolio-item-ganado d-flex position-absolute h-100 w-100">
 			           <div class="portfolio-item-ganado-content my-auto w-100 text-center text-white">						
 			            <i class="fas fa-check-circle fa-3x"></i><h1>{{ ganada.nombre }}</h1>
