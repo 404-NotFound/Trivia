@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} - Categorías{% endblock %}
+{% block title %}{{ titulo }}{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
@@ -33,18 +33,21 @@
 			       </a>
 			     </div>
 			{% endfor %}
-					
-			<!-- Categoria de la lista Al azar -->
-		     <div class="col-md-6 col-lg-4">
-		       <a class="portfolio-item d-block mx-auto" href="#categoria-{{ (lista_categorias|random).nombre }}">
-		         <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
-		           <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">						
-		            <i class="fas fa-question fa-3x"></i><h1>Al azar</h1>
-		           </div>
-		         </div>
-		         <img class="img-fluid" src="{{ url_for('static', filename='img/categorias/Random.png') }}" alt="">
-		       </a>
-		     </div>
+			
+		    {% if lista_categorias|length > 1 %}
+				<!-- Categoria de la lista Al azar -->
+			     <div class="col-md-6 col-lg-4">
+			       <a class="portfolio-item d-block mx-auto" href="#categoria-{{ (lista_categorias|random).nombre }}">
+			         <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+			           <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">						
+			            <i class="fas fa-question fa-3x"></i><h1>Al azar</h1>
+			           </div>
+			         </div>
+			         <img class="img-fluid" src="{{ url_for('static', filename='img/categorias/Random.png') }}" alt="">
+			       </a>
+			     </div>
+		    {% endif %}
+    
 		     
 			<!-- Se muestran las categorias ganadas con un for -->
 			{% for ganada in lista_ganadas %}

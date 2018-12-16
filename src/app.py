@@ -16,13 +16,13 @@ app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///models/trivia.db'
 db= SQLAlchemy(app)
 
 @app.route('/')
-def trivia_():
+def index():
     return redirect(url_for('trivia_inicio'))
 
 @app.route('/trivia')
 def trivia_inicio():
     session.clear()
-    return render_template("index.html.jinja2")
+    return render_template("index.html.jinja2",titulo="")
 
 @app.route('/trivia/')
 def trivia_inicio2():
@@ -71,7 +71,8 @@ def trivia_categorias():
     return render_template("categorias.html.jinja2",
                            lista_categorias=lista_categorias,
                            lista_ganadas=lista_ganadas,
-                           tiempo=tiempo)
+                           tiempo=tiempo,
+                           titulo=" - Categorías")
 
 @app.route('/trivia/<int:id_categoria>/pregunta')
 def trivia_pregunta(id_categoria):
@@ -102,7 +103,8 @@ def trivia_pregunta(id_categoria):
                            nombre_categoria=nombre_categoria,
                            pregunta=pregunta.text,
                            respuestas=lista_respuestas,
-                           tiempo=tiempo
+                           tiempo=tiempo,
+                           titulo=" - Pregunta"
                            )
 
 @app.route('/trivia/<int:id_categoria>/resultado/<int:id_respuesta>')
@@ -153,7 +155,8 @@ def trivia_resultado(id_categoria,id_respuesta):
                            relegida=respuesta_e.text,
                            url_gano=url_gano,
                            url_perdio=url_perdio,
-                           tiempo=tiempo
+                           tiempo=tiempo,
+                           titulo=" - Respuesta"
                            )
     
 @app.route('/trivia/fin')
@@ -161,7 +164,7 @@ def trivia_fin():
     #LA FUNCION TIEMPO JUGADO DEVUELVE LA RESTA DE TI-TF FORMATEADA EN TEXTO
     tiempo=tiempo_jugado(session['ti'])
     
-    return render_template("fin.html.jinja2", tiempo=tiempo)
+    return render_template("fin.html.jinja2", tiempo=tiempo, titulo=" - Fin")
 
 @app.route('/favicon.ico')
 def favicon():

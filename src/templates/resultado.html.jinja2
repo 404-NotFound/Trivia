@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} - Respuesta{% endblock %}
+{% block title %}{{ titulo }}{% endblock %}
 {% block head %}
     {{ super() }}
     
@@ -45,7 +45,7 @@
 			{% for respuesta in respuestas %}
 				{% if respuesta.es_correcta %}
 					{% if relegida == respuesta.text %}
-						<button type="button" class="btn btn-lg btn-success btn-block" disabled>
+						<button type="button" class="btn btn-lg btn-success btn-block border-warning" disabled>
 								{{ respuesta.text }} &#10004;
 						</button>
 					{% else %}
@@ -55,7 +55,7 @@
 					{% endif %}
 				{% else %}
 					{% if relegida == respuesta.text %}
-						<button type="button" class="btn btn-lg btn-danger btn-block" disabled>
+						<button type="button" class="btn btn-lg btn-danger btn-block border-warning" disabled>
 							{{ respuesta.text }} &#10008;
 						</button>
 					{% else %}

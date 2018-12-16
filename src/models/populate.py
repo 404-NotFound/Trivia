@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from models.trivia import db, Categoria, Pregunta, Respuesta
+from models.trivia import db, Categoria, Pregunta, Respuesta, Usuario, Post
 
 #CREO TABLAS
 db.drop_all()
@@ -58,7 +58,7 @@ db.session.add(r_capital_3_3)
 p_capital_4 = Pregunta(text='Cuál es la capital de Brasil', categoria=c_geografia)
 r_capital_4 = Respuesta(text="Brasilia", es_correcta=True, pregunta=p_capital_4)
 r_capital_4_2 = Respuesta(text="Porto Alegre", es_correcta=False, pregunta=p_capital_4)
-r_capital_4_3 = Respuesta(text="Rìo de Janeirp", es_correcta=False, pregunta=p_capital_4)
+r_capital_4_3 = Respuesta(text="Rìo de Janeiro", es_correcta=False, pregunta=p_capital_4)
 db.session.add(p_capital_4)
 db.session.add(r_capital_4)
 db.session.add(r_capital_4_2)
@@ -258,6 +258,22 @@ db.session.add(r_arte_1_2)
 db.session.add(r_arte_1_3)
 
 
+#===============================================#
+#                     USERS:                    #
+#===============================================#
+admin = Usuario(username="Admin", 
+                email="no-reply@trivia-support.com", 
+                password_hash=123456789,
+                ganadas=0,
+                mejor_tf=0.0)
+db.session.add(admin)
+
+#===============================================#
+#                     POSTS:                    #
+#===============================================#
+adm_post = Post(text="Bienvenidos, gracias por jugar.",autor_id=1)
+db.session.add(adm_post)
+
 # APLICAR CAMBIOS:
 db.session.commit()
 print("DB OK")
@@ -265,3 +281,5 @@ print("DB OK")
 print(Categoria.query.all())
 print(Pregunta.query.all())
 print(Respuesta.query.all())
+print(Usuario.query.all())
+print(Post.query.all())

@@ -180,7 +180,6 @@ section h2 {
 header.masthead {
   padding-top: calc(6rem + 72px);
   padding-bottom: 6rem;
-  min-height:100vh;
 }
 
 header.masthead h1 {

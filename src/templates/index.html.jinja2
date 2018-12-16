@@ -1,19 +1,19 @@
 {% extends "base.html" %}
-{% block title %}{% endblock %}
+{% block title %}{{ titulo }}{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
 {% block content %}
 
     <!-- Beinvenida -->
-    <header class="masthead bg-primary text-white text-center">
+    <header class="masthead bg-primary text-white text-center" id="welcome">
       <div class="container">
       	<div class="mb-5 d-block mx-auto">
 			<a class="rounded-circle js-scroll-trigger " href="#jugar">
 	        <img class="img-fluid" src="{{ url_for('static', filename='img/profile.png') }}" alt="">
 	        </a>
 	    </div>
-        <h1 class="text-uppercase mb-0">Bienvenido a Trivia!</h1>
+		<h1 class="text-uppercase mb-0">Bienvenido a Trivia!</h1>
         <hr class="star-light">
         <h2 class="font-weight-light mb-0">Desafiamos tus conocimientos</h2>
       </div>
@@ -22,19 +22,22 @@
     <!-- Jugar Grid Section -->
     <section class="portfolio" id="jugar">
       <div class="container">
-
-		<h2 class="text-center text-uppercase text-secondary mb-0">Jugar</h2>
+		<a class="js-scroll-trigger" href="#empezar">
+			<h2 class="text-center text-uppercase text-secondary mb-0">Jugar</h2>
+		</a>
 		<hr class="star-dark mb-5">
-		<br>
-		<h2 class="text-center font-weight-light mb-5">Supera nuestro desafío</h2>
-		<p class='lead text-center mb-5'>Para ganar la trivia deberás acertar por lo menos una pregunta de cada categoría 
-		en el menor tiempo posible
-		<br>¿Te atreves?</p><br>
-
-		<div class="text-center mt-4">
-		  <a class="btn btn-xl btn-primary" href="{{ url_for('trivia_categorias') }}">
-		    &#128076; Comenzar a Jugar !
-		  </a>
+		<div id="empezar">
+			<br>
+			<h2 class="text-center font-weight-light mb-5">Supera nuestro desafío</h2>
+			<p class='lead text-center mb-5'>Para ganar la trivia deberás acertar por lo menos una pregunta de cada categoría 
+			en el menor tiempo posible
+			<br>¿Te atreves?</p><br>
+	
+			<div class="text-center mt-4">
+			  <a class="btn btn-xl btn-primary" href="{{ url_for('trivia_categorias') }}">
+			    &#128076; Comenzar a Jugar !
+			  </a>
+			</div>
 		</div>
 
       </div>
