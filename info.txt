@@ -1,1 +1,26 @@
+# Dependencias:
+
+pip install --upgrade pip
+pip install flask
+pip install Flask-WTF
+pip install WTForms
+pip install flask_sqlaclhemy
+pip install Flask-Session
 pip install flask-bcrypt
+
+# Mas info:
+
+# Package          Version
+# ---------------- -------
+# bcrypt           3.1.5  
+# Flask            1.0.2  
+# Flask-Bcrypt     0.7.1  
+# Flask-Mail       0.9.1  
+# Flask-Session    0.3.1  
+# Flask-SQLAlchemy 2.3.2  
+# Flask-WTF        0.14.2 
+# Jinja2           2.10   
+# pip              18.1   
+# requests         2.11.1 
+# SQLAlchemy       1.2.14 
+# WTForms          2.2.1  

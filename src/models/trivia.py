@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, DateTime
@@ -134,7 +136,7 @@ def postear(texto,autor_id):
         return "Mensaje posteado."
     except:
         db.session.rollback()
-        return "Error al postear mensaje."
+        raise PostError()
     
 def login(username_o_mail,password):
     try:

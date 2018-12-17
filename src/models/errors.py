@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 class InternoError(Exception):
     def __init__(self, message="Internal server Error.", status_code=500):
         Exception.__init__(self)
@@ -30,6 +32,16 @@ class LoginUserError(Exception):
 
 class LoginPasswordError(Exception):
     def __init__(self, message="Contraseña incorrecta.", status_code=404):
+        Exception.__init__(self)
+        self.message = message
+        self.status_code = status_code
+    def __str__(self):
+        return "Error: "+self.message
+    def to_dic(self):
+        return {'message':self.message,'status_code':self.status_code}
+
+class PostError(Exception):
+    def __init__(self, message="Error no se pudo publicar el mensaje.", status_code=404):
         Exception.__init__(self)
         self.message = message
         self.status_code = status_code
