@@ -1,18 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from flask import Flask,render_template,redirect,url_for,session
-from models.trivia import Usuario, Post
+from flask import Flask,session
+from models.trivia import db, Usuario, Post
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired, Email
+from flask_bcrypt import Bcrypt
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'e5ac358cf0bf-11e5-9e39-d3b532c10a28' #or os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///models/trivia.db'
 db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
 
 class LoginForm(FlaskForm):
     username = StringField('Usuario', validators=[DataRequired("Ingrese su nombre de usuario.")])
@@ -32,6 +35,51 @@ class MessageForm(FlaskForm):
     message = TextAreaField("Mensaje", [DataRequired("Escriba aquí su mensaje.")])
     submit = SubmitField('Registrar')
 
+def registrar(username,email,password,ganadas=0,mejor_tf=0.0):
+    try:
+        pw_hash = bcrypt.generate_password_hash(password)
+        print(pw_hash)
+        print(type(str(pw_hash)))
+
+        usuario = Usuario(
+            username=str(username), 
+            email=str(email), 
+            password_hash=str(pw_hash),
+            ganadas=int(ganadas),
+            mejor_tf=float(mejor_tf)
+            )
+        
+        db.session.add(usuario)
+        db.session.commit()
+        
+        return "Usuario creado"
+    
+    pw_hash = bcrypt.generate_password_hash(password)
+    usuario = Usuario(
+        username=username, 
+        email=email, 
+        password_hash=pw_hash,
+        ganadas=ganadas,
+        mejor_tf=mejor_tf
+        )
+    
+    db.session.add(usuario)
+    db.session.commit()
+    
+    return "Usuario creado"
+
+registrar("Matias Mutter","matimutter@gmail.com","07101993")
+
+    except:
+        db.session.rollback()
+        return "Error al crear usuario"
+print(Usuario.query.all())
+
+
+#para chequear contraseñas
+#bcrypt.check_password_hash(pw_hash, 'hunter2') # returns True
+
+'''
 @app.route('/trivia/login', methods=['GET', 'POST'])
 def login():
         
@@ -48,15 +96,6 @@ def login():
             session['ti']=time.time()
         
     return render_template('login.html.jinja2', form=form)
-
-@app.route('/trivia/registrarme', methods=['GET', 'POST'])
-def register():
-    form = RegisterForm()
-    if form.validate_on_submit():
-        flash('User registred {}, email={}'.format(
-            form.username.data, form.email.data))
-        return redirect(url_for('login'))
-    return render_template('register.html.jinja2', form=form)
 
 @app.route('/usuario')
 def user():
@@ -84,4 +123,4 @@ def user():
 def salir():
     session.clear()
     return redirect(url_for('index'))
-    
+'''

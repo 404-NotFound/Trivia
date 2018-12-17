@@ -75,7 +75,7 @@
               <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contacto">Contacto</a>
             </li>
             <li class="nav-item mx-0 mx-lg-1">
-              <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#login">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded" data-toggle="modal" data-target="#exampleModalCenter" href="#">
               	<i class="fas fa-lg fa-user-circle"></i>
               </a>
             </li>
@@ -237,6 +237,8 @@
         <i class="fa fa-chevron-up"></i>
       </a>
     </div>
+    
+    {% include 'login.html.jinja2' %}
 
     <!-- Script para scrollear a un div (con offset) desde otra pagina -->
     <script src="{{ url_for('static', filename='js/scroller.js') }}"></script>

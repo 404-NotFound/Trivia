@@ -31,8 +31,12 @@
 			<h2 class="text-center font-weight-light mb-5">Supera nuestro desafío</h2>
 			<p class='lead text-center mb-5'>Para ganar la trivia deberás acertar por lo menos una pregunta de cada categoría 
 			en el menor tiempo posible
-			<br>¿Te atreves?</p><br>
-	
+			<br>¿Te atreves?<br>
+			<!-- link a trigger modal reglas -->
+			<a class="nav-link py-3 px-0 px-lg-3 rounded" data-toggle="modal" data-target="#exampleModalLong" href="#">
+				<i class="fas fa-info-circle btn-secoundary-light"></i> Vea las reglas
+			</a>
+			</p>
 			<div class="text-center mt-4">
 			  <a class="btn btn-xl btn-primary" href="{{ url_for('trivia_categorias') }}">
 			    &#128076; Comenzar a Jugar !
@@ -42,5 +46,7 @@
 
       </div>
     </section>
+    
+	{% include 'reglas.html.jinja2' %}
 	
 {% endblock %}

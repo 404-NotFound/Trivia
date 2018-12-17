@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from models.trivia import db, Categoria, Pregunta, Respuesta, Usuario, Post
+from models.trivia import db, Categoria, Pregunta, Respuesta, Usuario, Post, app
+
 
 #CREO TABLAS
 db.drop_all()
@@ -263,9 +264,9 @@ db.session.add(r_arte_1_3)
 #===============================================#
 admin = Usuario(username="Admin", 
                 email="no-reply@trivia-support.com", 
-                password_hash=123456789,
                 ganadas=0,
                 mejor_tf=0.0)
+admin.set_password("admin")
 db.session.add(admin)
 
 #===============================================#
