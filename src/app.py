@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-from flask import Flask,render_template,redirect,url_for,session,send_from_directory
 from models.trivia import Categoria,Pregunta,Respuesta
+from models.forms import *
+from flask import Flask,render_template,redirect,url_for,session,send_from_directory,flash
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import desc
 from sqlalchemy.sql.expression import func
+from sqlalchemy import desc
 from datetime import datetime, timedelta
 import time
 
@@ -29,8 +30,13 @@ def trivia_inicio():
             session.pop('tf')
     except:
         pass;
-        
-    return render_template("index.html.jinja2",titulo="")
+    login_form = LoginForm()
+    register_form = RegisterForm()
+    
+    return render_template("index.html.jinja2",
+                           titulo="",
+                           login_form=login_form,
+                           register_form=register_form)
 
 @app.route('/trivia/')
 def trivia_inicio_():

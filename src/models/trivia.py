@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from flask import Flask
+from flask import Flask,session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, DateTime
 from sqlalchemy.sql import exists
@@ -125,6 +125,26 @@ class Usuarie:
             db.session.rollback()  
             raise UsuarioInvalidoError()
 
+def logIn(username_o_mail,password):
+    try:
+        if "@" in username_o_mail:
+            user=Usuario.query.filter_by(email=username_o_mail).first()
+        else:
+            user=Usuario.query.filter_by(username=username_o_mail).first()
+    except:
+        raise LoginError()
+    if user is None:
+        raise LoginUserError()
+    if user.check_password(password):
+        return {'id':user.id,
+                'username':user.username,
+                'ganadas':user.ganadas,
+                'mejor_tf':user.mejor_tf}
+    raise LoginPasswordError()
+
+def logOff():
+    session.clear()
+
 def postear(texto,autor_id):
     try:
         mensaje = Post(
@@ -137,34 +157,27 @@ def postear(texto,autor_id):
     except:
         db.session.rollback()
         raise PostError()
-    
-def login(username_o_mail,password):
-    try:
-        if "@" in username_o_mail:
-            user=Usuario.query.filter_by(email=username_o_mail).first()
-        else:
-            user=Usuario.query.filter_by(username=username_o_mail).first()
-    except:
-        raise LoginError()
-    if user is None:
-        raise LoginUserError()
-    if user.check_password(password):
-        return [user.id,user.username,user.ganadas,user.mejor_tf]
-    raise LoginPasswordError()
 
 '''
-msg1={}
+msgP={}
 try:
-    sesion=login("Admin","admin")
-    print(sesion)
+    p=postear("Muy bueno el juego che.", 3)
+except Exception as e:
+    msgP=e.to_dic()
+print (msgP.get('message'),msgP.get('status_code'))
+
+msgU={}
+try:
+    u=login("Admin","admin")
+    print(u)
 except Exception as e:
     msg1=e.to_dic()
 print (msg1.get('message'),msg1.get('status_code'))
 
-msg2={}
+msgR={}
 try:
-    m=Usuarie("AmiguitoImaginario","amiguito@imaginario.com","amiguitomaginario").registrar()
-    print(m)
+    r=Usuarie("AmiguitoImaginario","amiguito@imaginario.com","amiguitomaginario").registrar()
+    print(r)
 except Exception as e:
     msg2=e.to_dic()
 print (msg2.get('message'),msg2.get('status_code'))
