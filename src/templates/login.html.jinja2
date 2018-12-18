@@ -8,20 +8,23 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body row justify-content-md-center">
-	      <div class="col-md-auto">
-			<form action="" method="post">
-				{{ login_form.hidden_tag() }}
-				<p>
-				{{ login_form.username.label }}<br>
-				{{ login_form.username(size=32) }}
-				</p>
-				<p>
-				{{ login_form.password.label }}<br>
-				{{ login_form.password(size=32) }}
-				</p>
-				<p>{{ login_form.submit() }}</p>
-			</form>
+      <div class="modal-body">
+	      <div class="row justify-content-md-center">
+		      <div class="col-md-auto">
+				<form action="" method="post">
+					{{ login_form.hidden_tag() }}
+					<p>
+					{{ login_form.username.label }}<br>
+					{{ login_form.username(size=32) }}
+					</p>
+					<p>
+					{{ login_form.password.label }}<br>
+					{{ login_form.password(size=32) }}
+					</p>
+					<p>{{ login_form.submit() }}</p>
+				</form>
+		      </div>
+			{% include 'mensajes.html.jinja2' %}
 	      </div>
       </div>
       <div class="modal-footer d-flex justify-content-between">

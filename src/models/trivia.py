@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from flask import Flask,session
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func, DateTime
+from sqlalchemy import func, DateTime, update
 from sqlalchemy.sql import exists
 from flask_bcrypt import Bcrypt
 from models.errors import *
@@ -135,11 +135,15 @@ def logIn(username_o_mail,password):
         raise LoginError()
     if user is None:
         raise LoginUserError()
-    if user.check_password(password):
-        return {'id':user.id,
-                'username':user.username,
-                'ganadas':user.ganadas,
-                'mejor_tf':user.mejor_tf}
+    try:
+        if user.check_password(password):
+            return {'id':user.id,
+                    'username':user.username,
+                    'email':user.email,
+                    'ganadas':user.ganadas,
+                    'mejor_tf':user.mejor_tf}
+    except:
+        raise LoginPasswordError()
     raise LoginPasswordError()
 
 def logOff():
@@ -150,13 +154,19 @@ def postear(texto,autor_id):
         mensaje = Post(
             text=str(texto),
             autor_id=int(autor_id)
-            )  
+            )
         db.session.add(mensaje)
         db.session.commit()        
         return "Mensaje posteado."
     except:
         db.session.rollback()
         raise PostError()
+
+def ganar(ganador_id):
+    usuario_g=Usuario.query.filter_by(id=ganador_id).first()
+    premios=usuario_g.ganadas+1    
+    db.session.query(Usuario).filter(Usuario.id==ganador_id).update({'ganadas':premios})
+    db.session.commit()
 
 '''
 msgP={}
@@ -168,7 +178,7 @@ print (msgP.get('message'),msgP.get('status_code'))
 
 msgU={}
 try:
-    u=login("Admin","admin")
+    u=logIn("Admin","admin")
     print(u)
 except Exception as e:
     msg1=e.to_dic()
