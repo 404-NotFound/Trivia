@@ -6,6 +6,7 @@ from sqlalchemy import func, DateTime, update
 from sqlalchemy.sql import exists
 from flask_bcrypt import Bcrypt
 from models.errors import *
+from sqlalchemy.sql.expression import null
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -69,12 +70,12 @@ class Post(db.Model):
         return '<User: %s | Post: %s>' % (self.autor_id,self.text)
 
 class Usuarie:
-    def __init__(self,username,email,password,ganadas=0,mejor_tf=0.0):
+    def __init__(self,username,email,password,ganadas=0,mejor_tf=null):
         self.username = self.validarNombre(username)
         self.email = self.validarEmail(email)
         self.password = self.validarPassword(password)
-        self.ganadas = self.validarGanadas(ganadas)
-        self.mejor_tf = self.validarTF(mejor_tf)
+        self.ganadas = self.ganadas
+        self.mejor_tf = self.mejor_tf
     def __str__(self):
         return "Usuario: {}".format(self.username)
     def get_nombre(self):
@@ -97,13 +98,6 @@ class Usuarie:
         if isinstance(v_password, str) and (6<=len(v_password)<=128):
             return v_password
         raise PasswordInvalidaError()
-    def validarGanadas(self, v_ganadas):
-        if isinstance(v_ganadas, int) and v_ganadas>(-1):
-            return v_ganadas
-        raise TriviasGanadasError()
-    def validarTF(self, v_mejor_tf):
-        if isinstance(v_mejor_tf, float) and v_mejor_tf>(-1):
-            return v_mejor_tf
         raise TiempoInvalidoError()
     def registrar(self):
         if db.session.query(exists().where(Usuario.username==self.username)).scalar():
@@ -115,7 +109,7 @@ class Usuarie:
                 username=str(self.username), 
                 email=str(self.email),
                 ganadas=int(self.ganadas),
-                mejor_tf=float(self.mejor_tf)
+                mejor_tf=self.mejor_tf
                 )
             new_user.set_password(str(self.password))
             db.session.add(new_user)
@@ -162,11 +156,23 @@ def postear(texto,autor_id):
         db.session.rollback()
         raise PostError()
 
-def ganar(ganador_id):
+def ganar(ganador_id,ganador_tf):
     usuario_g=Usuario.query.filter_by(id=ganador_id).first()
-    premios=usuario_g.ganadas+1    
+    premios=usuario_g.ganadas+1
+    tf_anterior=usuario_g.mejor_tf
+    nuevo_tf=tf_anterior
     db.session.query(Usuario).filter(Usuario.id==ganador_id).update({'ganadas':premios})
     db.session.commit()
+    if isinstance(tf_anterior, float):
+        if ganador_tf<tf_anterior:
+            db.session.query(Usuario).filter(Usuario.id==ganador_id).update({'mejor_tf':ganador_tf})
+            nuevo_tf=ganador_tf
+            db.session.commit()
+    else:
+        db.session.query(Usuario).filter(Usuario.id==ganador_id).update({'mejor_tf':ganador_tf})
+        nuevo_tf=ganador_tf
+        db.session.commit()
+    return {'ganadas':premios,'mejor_tf':nuevo_tf}
 
 '''
 msgP={}

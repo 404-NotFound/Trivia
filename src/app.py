@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 from models.trivia import Categoria,Pregunta,Respuesta,logIn,logOff,ganar
-from models.forms import LoginForm, RegisterForm, MessageForm
+from models.forms import LoginForm, RegisterForm
 from flask import Flask,render_template,redirect,url_for,session,send_from_directory,flash,request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.expression import func
@@ -95,7 +95,7 @@ def trivia_categorias():
                 #lista_ganadas NO NECESITA URL PORQUE YA FUE GANADA
                 })
             
-    tiempo=tiempo_jugado(session['ti'])# <-- tiempo_jugado() CONVIERTE EL TIEMPO A TEXTO
+    tiempo=tiempo_formatear(tiempo_jugado(session['ti']))# <-- CALCULA Y CONVIERTE EL TIEMPO A TEXTO
     
     #DECLARO FORMULARIOS PARA LOGEAR Y REGISTRARSE
     login_form = LoginForm()
@@ -134,7 +134,7 @@ def trivia_pregunta(id_categoria):
             "url":(url_for('trivia_resultado',id_categoria=id_categoria,id_respuesta=respuesta.id))
             })
         
-    tiempo=tiempo_jugado(session['ti'])# <-- tiempo_jugado() CONVIERTE EL TIEMPO A TEXTO
+    tiempo=tiempo_formatear(tiempo_jugado(session['ti']))# CONVIERTE EL TIEMPO A TEXTO
     
     #DECLARO FORMULARIOS PARA LOGEAR Y REGISTRARSE
     login_form = LoginForm()
@@ -180,9 +180,16 @@ def trivia_resultado(id_categoria,id_respuesta):
         #SI ALGUNA CATEGORIA ES FALSE ganador = False
         if session['cat_jugadas'].get(str(cat.id)) == False:
             ganador = False
+    #ACA VA LO QUE SUCEDE CADA VEZ QUE GANA UNA CATEGORIA
     #SI GANADOR SIGUE EN True REDIRIGO AL TEMPLATE FINAL
     if ganador==True:
-        ganar(session['user'].get("id"))
+        #ganar() INCREMENTA EN UNO LA DB Y RETONRNA DIC {'ganadas':<int>,'mejor_tf':<float>}
+        #DE PASO ACTUALIZO 'ganadas' y 'mejor_tf' EN LA SESION
+        ganador_id=session['user'].get("id")
+        ganador_tf=(time.time())-(session['ti'])
+        dic_ganador=ganar(ganador_id,ganador_tf)
+        session['user'].update({'ganadas':dic_ganador.get('ganadas')})
+        session['user'].update({'mejor_tf':round(dic_ganador.get('mejor_tf'),2)})
         return redirect(url_for('trivia_fin'))
     url_perdio=url_for('trivia_pregunta',id_categoria=id_categoria)
     url_gano=url_for('trivia_categorias')
@@ -198,7 +205,7 @@ def trivia_resultado(id_categoria,id_respuesta):
             "es_correcta":respuesta.es_correcta
             })
         
-    tiempo=tiempo_jugado(session['ti'])# <-- tiempo_jugado() CONVIERTE EL TIEMPO A TEXTO
+    tiempo=tiempo_formatear(tiempo_jugado(session['ti']))# CONVIERTE EL TIEMPO A TEXTO
     
     #DECLARO FORMULARIOS PARA LOGEAR Y REGISTRARSE
     login_form = LoginForm()
@@ -224,7 +231,7 @@ def trivia_resultado(id_categoria,id_respuesta):
     
 @app.route('/trivia/fin', methods=['GET', 'POST'])
 def trivia_fin():
-    tiempo=tiempo_jugado(session['ti'])# <-- tiempo_jugado() CONVIERTE EL TIEMPO A TEXTO
+    tiempo=tiempo_formatear(tiempo_jugado(session['ti']))# CONVIERTE EL TIEMPO A TEXTO
 
     #DECLARO FORMULARIOS PARA LOGEAR Y REGISTRARSE
     login_form = LoginForm()
@@ -253,7 +260,9 @@ def favicon():
 
 def tiempo_jugado(ti):
     tf=time.time()
-    duracion=tf-ti
+    return tf-ti
+
+def tiempo_formatear(duracion):
     formato=datetime(1,1,1)+(timedelta(seconds=int(duracion)))
     if formato.hour>0:
         return "%d horas, %d minutos y %d segundos" % (formato.hour, formato.minute, formato.second)
@@ -270,6 +279,8 @@ def logInRequest(login_form):
             try:
                 session['user']=logIn(login_form.username.data, login_form.password.data)
                 flash("Has iniciado sesión como {}.".format(login_form.username.data),'success')
+                #ESTA LINEA LE DEJA A mejor_tf SOLO DOS FRACCIONES
+                session['user'].update({'mejor_tf':round(session['user'].get('mejor_tf'),2)})
                 return session['user']
             except Exception as e:
                 flash(e.to_dic().get('message'),'warning')
