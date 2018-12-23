@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from models.trivia import db, Categoria, Pregunta, Respuesta, Usuario, Post, app
+from models.trivia import db, Categoria, Pregunta, Respuesta, Usuario, Post
 
 
 #CREO TABLAS

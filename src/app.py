@@ -185,11 +185,14 @@ def trivia_resultado(id_categoria,id_respuesta):
     if ganador==True:
         #ganar() INCREMENTA EN UNO LA DB Y RETONRNA DIC {'ganadas':<int>,'mejor_tf':<float>}
         #DE PASO ACTUALIZO 'ganadas' y 'mejor_tf' EN LA SESION
-        ganador_id=session['user'].get("id")
-        ganador_tf=(time.time())-(session['ti'])
-        dic_ganador=ganar(ganador_id,ganador_tf)
-        session['user'].update({'ganadas':dic_ganador.get('ganadas')})
-        session['user'].update({'mejor_tf':round(dic_ganador.get('mejor_tf'),2)})
+        try:
+            ganador_id=session['user'].get("id")
+            ganador_tf=(time.time())-(session['ti'])
+            dic_ganador=ganar(ganador_id,ganador_tf)
+            session['user'].update({'ganadas':dic_ganador.get('ganadas')})
+            session['user'].update({'mejor_tf':round(dic_ganador.get('mejor_tf'),2)})
+        except:
+            pass;
         return redirect(url_for('trivia_fin'))
     url_perdio=url_for('trivia_pregunta',id_categoria=id_categoria)
     url_gano=url_for('trivia_categorias')
@@ -277,10 +280,17 @@ def logInRequest(login_form):
     except:
         if request.method == 'POST':
             try:
+                print("1")
                 session['user']=logIn(login_form.username.data, login_form.password.data)
+                print("2")
                 flash("Has iniciado sesión como {}.".format(login_form.username.data),'success')
                 #ESTA LINEA LE DEJA A mejor_tf SOLO DOS FRACCIONES
-                session['user'].update({'mejor_tf':round(session['user'].get('mejor_tf'),2)})
+                print("3")
+                try:
+                    session['user'].update({'mejor_tf':round(session['user'].get('mejor_tf'),2)})
+                except:
+                    session['user'].update({'mejor_tf':"--.--"})
+                print("4")
                 return session['user']
             except Exception as e:
                 flash(e.to_dic().get('message'),'warning')

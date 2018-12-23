@@ -255,10 +255,7 @@
     
     {% include 'login.html.jinja2' %}
     {% include 'register.html.jinja2' %}
-    {% include 'opciones.html.jinja2' %}    
-
-    <!-- Script para scrollear a un div (con offset) desde otra pagina -->
-    <script src="{{ url_for('static', filename='js/scroller.js') }}"></script>
+    {% include 'opciones.html.jinja2' %}
     
     <!-- Bootstrap core JavaScript -->
     <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
@@ -274,6 +271,12 @@
 
     <!-- Custom scripts for this template -->
     <script src="{{ url_for('static', filename='js/freelancer.min.js') }}"></script>
+    
+    <!-- Script para scrollear a un div (con offset) desde otra pagina -->
+    <script src="{{ url_for('static', filename='js/scroller.js') }}"></script>
+    
+    <!-- Cerrar modal al clickear afuera -->
+    <script src="{{ url_for('static', filename='js/cerrar_panel.js') }}"></script>
 
   </body>
 
