@@ -117,6 +117,15 @@ class PasswordInvalidaError(Exception):
     def to_dic(self):
         return {'message':self.message,'status_code':self.status_code}
 
+class PasswordDistintaError(Exception):
+    def __init__(self,message="Error, repita exactamente la misma contraseña.", status_code=400):
+        self.message=message
+        self.status_code=status_code
+    def __str__(self):
+        return "Error: "+self.message
+    def to_dic(self):
+        return {'message':self.message,'status_code':self.status_code}
+
 class TriviasGanadasError(Exception):
     def __init__(self,message="Valor no válido. Debe ser int.", status_code=500):
         self.message=message

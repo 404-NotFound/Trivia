@@ -6,7 +6,6 @@ from sqlalchemy import func, DateTime, update
 from sqlalchemy.sql import exists
 from flask_bcrypt import Bcrypt
 from models.errors import *
-from sqlalchemy.sql.expression import null
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -70,22 +69,24 @@ class Post(db.Model):
         return '<User: %s | Post: %s>' % (self.autor_id,self.text)
 
 class Usuarie:
-    def __init__(self,username,email,password,ganadas=0,mejor_tf=null):
+    def __init__(self,username,email,password,mejor_tf,ganadas):
         self.username = self.validarNombre(username)
         self.email = self.validarEmail(email)
         self.password = self.validarPassword(password)
-        self.ganadas = self.ganadas
-        self.mejor_tf = self.mejor_tf
+        self.mejor_tf = self.validarTF(mejor_tf)
+        self.ganadas = self.validarGanadas(ganadas)
     def __str__(self):
         return "Usuario: {}".format(self.username)
     def get_nombre(self):
         return self.username
     def get_email(self):
-        return self.edad
+        return self.email
     def get_ganadas(self):
         return self.ganadas
     def get_mejor_tf(self):
         return self.mejor_tf
+    def get_all(self):
+        return str([self.username,self.email,self.ganadas,self.mejor_tf])
     def validarNombre(self, v_username):
         if isinstance(v_username, str) and (4<=len(v_username)<=30):
             return v_username
@@ -99,6 +100,15 @@ class Usuarie:
             return v_password
         raise PasswordInvalidaError()
         raise TiempoInvalidoError()
+    def validarTF(self, v_tf):
+        print("validacion v_tf ...")
+        if isinstance(v_tf, float) or v_tf is None:
+            return v_tf
+        raise InternoError()
+    def validarGanadas(self, v_ganadas):
+        if isinstance(v_ganadas, int):
+            return v_ganadas
+        raise InternoError()
     def registrar(self):
         if db.session.query(exists().where(Usuario.username==self.username)).scalar():
             raise YaExisteUsuarioError()
@@ -108,17 +118,31 @@ class Usuarie:
             new_user = Usuario(
                 username=str(self.username), 
                 email=str(self.email),
-                ganadas=int(self.ganadas),
+                ganadas=self.ganadas,
                 mejor_tf=self.mejor_tf
                 )
             new_user.set_password(str(self.password))
             db.session.add(new_user)
             db.session.commit()
-            return "Usuario registrado."
         except:
             db.session.rollback()  
             raise UsuarioInvalidoError()
+        return "Usuario registrado."
 
+def register(nombre,passwd1,passwd2,email,tf=None,gano=0):
+    u_nuevo=Usuarie(nombre,email,passwd1,tf,gano)
+    if len(passwd1)<6:
+        raise PasswordInvalidaError()
+    if passwd1!=passwd2:
+        raise PasswordDistintaError()
+    u_nuevo.registrar()
+    user=Usuario.query.filter_by(username=u_nuevo.username).first()
+    return {'id':user.id,
+            'username':user.username,
+            'email':user.email,
+            'ganadas':user.ganadas,
+            'mejor_tf':user.mejor_tf}
+    
 def logIn(username_o_mail,password):
     try:
         if "@" in username_o_mail:

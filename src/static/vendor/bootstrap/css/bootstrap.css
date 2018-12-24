@@ -2951,6 +2951,7 @@ input[type="button"].btn-block {
   position: relative;
   height: 0;
   overflow: hidden;
+  transition: widht 0.35s ease;
   transition: height 0.35s ease;
 }
 
@@ -9025,6 +9026,34 @@ a.text-dark:hover, a.text-dark:focus {
   .table .thead-dark th {
     color: inherit;
     border-color: #dee2e6;
+  }
+  .collapse {
+	height: auto;
+	width: auto;
+  }
+  .collapse.height {
+	position: relative;
+	height: 0;
+	overflow: hidden;
+	-webkit-transition: height 0.35s ease;
+	-moz-transition: height 0.35s ease;
+	-o-transition: height 0.35s ease;
+	transition: height 0.35s ease;
+  }
+  .collapse.width {
+	position: relative;
+	width: 0;
+	overflow: hidden;
+	-webkit-transition: width 0.35s ease;
+	-moz-transition: width 0.35s ease;
+	-o-transition: width 0.35s ease;
+	transition: width 0.35s ease;
+  }
+  .collapse.in.width {
+	width: auto;
+  }
+  .collapse.in.height {
+	height: auto;
   }
 }
 /*# sourceMappingURL=bootstrap.css.map */

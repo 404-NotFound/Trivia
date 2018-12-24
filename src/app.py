@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-from models.trivia import Categoria,Pregunta,Respuesta,logIn,logOff,ganar
+from models.trivia import Categoria,Pregunta,Respuesta,logIn,logOff,register,ganar
 from models.forms import LoginForm, RegisterForm
 from flask import Flask,render_template,redirect,url_for,session,send_from_directory,flash,request
 from flask_sqlalchemy import SQLAlchemy
@@ -32,20 +32,14 @@ def trivia_inicio():
     except:
         pass;
     
-    #DECLARO FORMULARIOS PARA LOGEAR Y REGISTRARSE
-    login_form = LoginForm()
-    register_form = RegisterForm()
-    #ESTA FUNCIÓN logInRequest() SE ENCARGA DE HACER EL LOGIN CUANDO HAY POST
-    #RECIVE LOS DATOS DEL FORMULARIO Y CREA UNA session['user'] CON LOS DATOS DEL USUARIO
-    #AL MISMO TIEMPO RETORNA LOS DATOS PARA PODER PASARSELOS AL TEMPLATE
-    user_data=logInRequest(login_form)
+    user=userControl()
     
     debug_printSession()
     return render_template("index.html.jinja2",
                            titulo="",
-                           login_form=login_form,
-                           register_form=register_form,
-                           user_data=user_data)
+                           login_form=user['login_form'],
+                           register_form=user['register_form'],
+                           user_data=user['user_data'])
 
 @app.route('/trivia/', methods=['GET', 'POST'])
 def trivia_inicio_():
@@ -97,13 +91,7 @@ def trivia_categorias():
             
     tiempo=tiempo_formatear(tiempo_jugado(session['ti']))# <-- CALCULA Y CONVIERTE EL TIEMPO A TEXTO
     
-    #DECLARO FORMULARIOS PARA LOGEAR Y REGISTRARSE
-    login_form = LoginForm()
-    register_form = RegisterForm()
-    #ESTA FUNCIÓN logInRequest() SE ENCARGA DE HACER EL LOGIN CUANDO HAY POST
-    #RECIVE LOS DATOS DEL FORMULARIO Y CREA UNA session['user'] CON LOS DATOS DEL USUARIO
-    #AL MISMO TIEMPO RETORNA LOS DATOS PARA PODER PASARSELOS AL TEMPLATE
-    user_data=logInRequest(login_form)
+    user=userControl()
     
     debug_printSession()
     return render_template("categorias.html.jinja2",
@@ -111,9 +99,9 @@ def trivia_categorias():
                            lista_ganadas=lista_ganadas,
                            tiempo=tiempo,
                            titulo=" - Categorías",
-                           login_form=login_form,
-                           register_form=register_form,
-                           user_data=user_data)
+                           login_form=user['login_form'],
+                           register_form=user['register_form'],
+                           user_data=user['user_data'])
 
 @app.route('/trivia/<int:id_categoria>/pregunta', methods=['GET', 'POST'])
 def trivia_pregunta(id_categoria):
@@ -136,13 +124,7 @@ def trivia_pregunta(id_categoria):
         
     tiempo=tiempo_formatear(tiempo_jugado(session['ti']))# CONVIERTE EL TIEMPO A TEXTO
     
-    #DECLARO FORMULARIOS PARA LOGEAR Y REGISTRARSE
-    login_form = LoginForm()
-    register_form = RegisterForm()
-    #ESTA FUNCIÓN logInRequest() SE ENCARGA DE HACER EL LOGIN CUANDO HAY POST
-    #RECIVE LOS DATOS DEL FORMULARIO Y CREA UNA session['user'] CON LOS DATOS DEL USUARIO
-    #AL MISMO TIEMPO RETORNA LOS DATOS PARA PODER PASARSELOS AL TEMPLATE
-    user_data=logInRequest(login_form)
+    user=userControl()
     
     debug_printSession()
     return render_template("pregunta.html.jinja2",
@@ -151,9 +133,9 @@ def trivia_pregunta(id_categoria):
                            respuestas=lista_respuestas,
                            tiempo=tiempo,
                            titulo=" - Pregunta",
-                           login_form=login_form,
-                           register_form=register_form,
-                           user_data=user_data)
+                           login_form=user['login_form'],
+                           register_form=user['register_form'],
+                           user_data=user['user_data'])
 
 @app.route('/trivia/<int:id_categoria>/resultado/<int:id_respuesta>', methods=['GET', 'POST'])
 def trivia_resultado(id_categoria,id_respuesta):
@@ -186,9 +168,9 @@ def trivia_resultado(id_categoria,id_respuesta):
         #ganar() INCREMENTA EN UNO LA DB Y RETONRNA DIC {'ganadas':<int>,'mejor_tf':<float>}
         #DE PASO ACTUALIZO 'ganadas' y 'mejor_tf' EN LA SESION
         try:
+            session['tf']=(time.time())-(session['ti'])
             ganador_id=session['user'].get("id")
-            ganador_tf=(time.time())-(session['ti'])
-            dic_ganador=ganar(ganador_id,ganador_tf)
+            dic_ganador=ganar(ganador_id,session['tf'])
             session['user'].update({'ganadas':dic_ganador.get('ganadas')})
             session['user'].update({'mejor_tf':round(dic_ganador.get('mejor_tf'),2)})
         except:
@@ -210,13 +192,7 @@ def trivia_resultado(id_categoria,id_respuesta):
         
     tiempo=tiempo_formatear(tiempo_jugado(session['ti']))# CONVIERTE EL TIEMPO A TEXTO
     
-    #DECLARO FORMULARIOS PARA LOGEAR Y REGISTRARSE
-    login_form = LoginForm()
-    register_form = RegisterForm()
-    #ESTA FUNCIÓN logInRequest() SE ENCARGA DE HACER EL LOGIN CUANDO HAY POST
-    #RECIVE LOS DATOS DEL FORMULARIO Y CREA UNA session['user'] CON LOS DATOS DEL USUARIO
-    #AL MISMO TIEMPO RETORNA LOS DATOS PARA PODER PASARSELOS AL TEMPLATE
-    user_data=logInRequest(login_form)
+    user=userControl()
     
     debug_printSession()
     return render_template("resultado.html.jinja2",
@@ -228,29 +204,23 @@ def trivia_resultado(id_categoria,id_respuesta):
                            url_perdio=url_perdio,
                            tiempo=tiempo,
                            titulo=" - Respuesta",
-                           login_form=login_form,
-                           register_form=register_form,
-                           user_data=user_data)
+                           login_form=user['login_form'],
+                           register_form=user['register_form'],
+                           user_data=user['user_data'])
     
 @app.route('/trivia/fin', methods=['GET', 'POST'])
 def trivia_fin():
     tiempo=tiempo_formatear(tiempo_jugado(session['ti']))# CONVIERTE EL TIEMPO A TEXTO
 
-    #DECLARO FORMULARIOS PARA LOGEAR Y REGISTRARSE
-    login_form = LoginForm()
-    register_form = RegisterForm()
-    #ESTA FUNCIÓN logInRequest() SE ENCARGA DE HACER EL LOGIN CUANDO HAY POST
-    #RECIVE LOS DATOS DEL FORMULARIO Y CREA UNA session['user'] CON LOS DATOS DEL USUARIO
-    #AL MISMO TIEMPO RETORNA LOS DATOS PARA PODER PASARSELOS AL TEMPLATE
-    user_data=logInRequest(login_form)
+    user=userControl()
     
     debug_printSession()    
     return render_template("fin.html.jinja2",
                            tiempo=tiempo,
                            titulo=" - Fin",
-                           login_form=login_form,
-                           register_form=register_form,
-                           user_data=user_data)
+                           login_form=user['login_form'],
+                           register_form=user['register_form'],
+                           user_data=user['user_data'])
     
 @app.route('/trivia/salir')
 def trivia_salir():
@@ -272,31 +242,81 @@ def tiempo_formatear(duracion):
     else:
         return "%d minutos y %d segundos" % (formato.minute, formato.second)
 
-def logInRequest(login_form):
+def userControl():
+    #DECLARO FORMULARIOS PARA LOGEAR Y REGISTRARSE
+    login_form = LoginForm(prefix="login_form")
+    register_form = RegisterForm(prefix="register_form")
+    #ESTA FUNCIÓN logInRequest() SE ENCARGA DE HACER EL LOGIN CUANDO HAY POST
+    #RECIVE LOS DATOS DEL FORMULARIO Y CREA UNA session['user'] CON LOS DATOS DEL USUARIO
+    #AL MISMO TIEMPO RETORNA LOS DATOS PARA PODER PASARSELOS AL TEMPLATE
+    try:
+        if session['user']:
+            user_data=session['user']
+    except:
+        user_data=None
+    
+    if request.method == 'POST':
+        if register_form.submit() and register_form.password_repeat.data:
+            print ("Register form is submitted")
+            user_data=registerRequest(register_form, session)
+        if login_form.submit() and (not register_form.password_repeat.data):
+            print ("Login form is submitted")
+            user_data=logInRequest(login_form,session)
+    return {'user_data':user_data,'login_form':login_form,'register_form':register_form}
+
+def logInRequest(login_form,session):
+    try:
+        if session['user']:
+            if login_form.submit():
+                flash("Ya has iniciado sesión.",'info')
+            return session['user']
+    except:
+        try:
+            session['user']=logIn(login_form.username.data, login_form.password.data)
+            flash("Has iniciado sesión como {}.".format(login_form.username.data),'success')
+            #ESTA LINEA LE DEJA A mejor_tf SOLO DOS FRACCIONES
+            try:
+                session['user'].update({'mejor_tf':round(session['user'].get('mejor_tf'),2)})
+            except:
+                session['user'].update({'mejor_tf':"--.--"})
+            return session['user']
+        except Exception as e:
+                flash(e.to_dic().get('message'),'warning')
+    return None
+    
+def registerRequest(register_form,session):
     try:
         if session['user']:
             flash("Ya has iniciado sesión.",'info')
             return session['user']
     except:
-        if request.method == 'POST':
+        try:
             try:
-                print("1")
-                session['user']=logIn(login_form.username.data, login_form.password.data)
-                print("2")
-                flash("Has iniciado sesión como {}.".format(login_form.username.data),'success')
-                #ESTA LINEA LE DEJA A mejor_tf SOLO DOS FRACCIONES
-                print("3")
-                try:
+                if session['tf']:
+                    session['user']=register(register_form.username.data,
+                                             register_form.password.data,
+                                             register_form.password_repeat.data,
+                                             register_form.email.data,
+                                             session['tf'],
+                                             1)
                     session['user'].update({'mejor_tf':round(session['user'].get('mejor_tf'),2)})
-                except:
-                    session['user'].update({'mejor_tf':"--.--"})
-                print("4")
-                return session['user']
-            except Exception as e:
+                    
+            except:
+                session['user']=register(register_form.username.data,
+                                         register_form.password.data,
+                                         register_form.password_repeat.data,
+                                         register_form.email.data)
+                session['user'].update({'mejor_tf':"--.--"})
+            flash("Usuario registrado", 'success')
+            return session['user']
+        except Exception as e:
+            try:
                 flash(e.to_dic().get('message'),'warning')
-                return None
-        return None
-    
+            except:
+                print(str(e)+" "+str(type(e)))
+            return None
+    return None
+            
 def debug_printSession():
     print("\n"+"-"*100)
     print("SESSION_ITEMS:\n")
