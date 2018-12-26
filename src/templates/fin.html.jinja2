@@ -26,9 +26,15 @@
       </div>
       
 		<div class="text-center mt-4">
+		{% if user_data.username %}
 		  <a class="btn btn-xl btn-primary" href="{{ url_for('trivia_inicio') }}">
 		    &#128075; Terminar
 		  </a>
+		 {% else %}
+			<a class="btn btn-xl btn-primary" data-toggle="modal" href="#sugerenciaModal" role="button" aria-expanded="false" aria-controls="collapseExample">
+				&#128526; Ingresar al ranking!
+			</a>
+         {% endif %}
 		</div>
     </section>
 

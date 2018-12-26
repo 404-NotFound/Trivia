@@ -101,7 +101,6 @@ class Usuarie:
         raise PasswordInvalidaError()
         raise TiempoInvalidoError()
     def validarTF(self, v_tf):
-        print("validacion v_tf ...")
         if isinstance(v_tf, float) or v_tf is None:
             return v_tf
         raise InternoError()

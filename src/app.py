@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-from models.trivia import Categoria,Pregunta,Respuesta,logIn,logOff,register,ganar
+from models.trivia import Categoria,Pregunta,Respuesta,logIn,logOff,register,ganar,Usuario
 from models.forms import LoginForm, RegisterForm
 from flask import Flask,render_template,redirect,url_for,session,send_from_directory,flash,request
 from flask_sqlalchemy import SQLAlchemy
@@ -9,6 +9,7 @@ from sqlalchemy.sql.expression import func
 from sqlalchemy import desc
 from datetime import datetime, timedelta
 import time
+import sqlalchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'e5ac358cf0bf-11e5-9e39-d3b532c10a28' #or os.getenv('SECRET_KEY')
@@ -32,14 +33,17 @@ def trivia_inicio():
     except:
         pass;
     
-    user=userControl()
+    user=userControl(session)
+    
+    ranking=rankear()
     
     debug_printSession()
     return render_template("index.html.jinja2",
                            titulo="",
                            login_form=user['login_form'],
                            register_form=user['register_form'],
-                           user_data=user['user_data'])
+                           user_data=user['user_data'],
+                           ranking=ranking)
 
 @app.route('/trivia/', methods=['GET', 'POST'])
 def trivia_inicio_():
@@ -91,7 +95,9 @@ def trivia_categorias():
             
     tiempo=tiempo_formatear(tiempo_jugado(session['ti']))# <-- CALCULA Y CONVIERTE EL TIEMPO A TEXTO
     
-    user=userControl()
+    user=userControl(session)
+    
+    ranking=rankear()
     
     debug_printSession()
     return render_template("categorias.html.jinja2",
@@ -101,7 +107,8 @@ def trivia_categorias():
                            titulo=" - Categorías",
                            login_form=user['login_form'],
                            register_form=user['register_form'],
-                           user_data=user['user_data'])
+                           user_data=user['user_data'],
+                           ranking=ranking)
 
 @app.route('/trivia/<int:id_categoria>/pregunta', methods=['GET', 'POST'])
 def trivia_pregunta(id_categoria):
@@ -124,7 +131,9 @@ def trivia_pregunta(id_categoria):
         
     tiempo=tiempo_formatear(tiempo_jugado(session['ti']))# CONVIERTE EL TIEMPO A TEXTO
     
-    user=userControl()
+    user=userControl(session)
+    
+    ranking=rankear()
     
     debug_printSession()
     return render_template("pregunta.html.jinja2",
@@ -135,7 +144,8 @@ def trivia_pregunta(id_categoria):
                            titulo=" - Pregunta",
                            login_form=user['login_form'],
                            register_form=user['register_form'],
-                           user_data=user['user_data'])
+                           user_data=user['user_data'],
+                           ranking=ranking)
 
 @app.route('/trivia/<int:id_categoria>/resultado/<int:id_respuesta>', methods=['GET', 'POST'])
 def trivia_resultado(id_categoria,id_respuesta):
@@ -153,7 +163,7 @@ def trivia_resultado(id_categoria,id_respuesta):
         dic=session['cat_jugadas']
         dic.update({str(id_categoria):True})
         session['cat_jugadas']=dic
-        
+    
     #SI EL JUGADOR GANÓ TODAS LAS CATEGORIAS REDIRIGO EL FLUJO AL FINAL DEL JUEGO
     todas_categorias=Categoria.query.all()
     ganador = True
@@ -176,9 +186,9 @@ def trivia_resultado(id_categoria,id_respuesta):
         except:
             pass;
         return redirect(url_for('trivia_fin'))
+    
     url_perdio=url_for('trivia_pregunta',id_categoria=id_categoria)
     url_gano=url_for('trivia_categorias')
-    #LA FUNCION TIEMPO JUGADO DEVUELVE LA RESTA DE TI-TF FORMATEADA EN TEXTO
     
     #DECLARO lista_respuestas QUE POR CADA RESPUESTA TIENE UN DIC: {'text':<RESPUESTA>,'es_correcta':<True O False>,'url':<RUTA>}
     #LE PASO TODAS LAS RESPUESTAS AL TEMPLATE
@@ -190,9 +200,12 @@ def trivia_resultado(id_categoria,id_respuesta):
             "es_correcta":respuesta.es_correcta
             })
         
+    #LA FUNCION TIEMPO JUGADO DEVUELVE LA RESTA DE TI-TF FORMATEADA EN TEXTO
     tiempo=tiempo_formatear(tiempo_jugado(session['ti']))# CONVIERTE EL TIEMPO A TEXTO
     
-    user=userControl()
+    user=userControl(session)
+    
+    ranking=rankear()
     
     debug_printSession()
     return render_template("resultado.html.jinja2",
@@ -206,21 +219,36 @@ def trivia_resultado(id_categoria,id_respuesta):
                            titulo=" - Respuesta",
                            login_form=user['login_form'],
                            register_form=user['register_form'],
-                           user_data=user['user_data'])
+                           user_data=user['user_data'],
+                           ranking=ranking)
     
 @app.route('/trivia/fin', methods=['GET', 'POST'])
 def trivia_fin():
     tiempo=tiempo_formatear(tiempo_jugado(session['ti']))# CONVIERTE EL TIEMPO A TEXTO
-
-    user=userControl()
     
-    debug_printSession()    
+    #SI SE REGISTRA O INICIA SESION EN ESTA RUTA SE LE AGREGA LA TRIVIA GANADA
+    try:
+        #CHEQUEO QUE SI YA HA INICIADO SESION
+        if session['user']:
+            #SI YA HABIA UNA SESION CARGO LOS DATOS NORMALMENTE
+            user=userControl(session)
+    except:
+        #SI NO HABIA SESION CARGO LOS DATOS DE REGISTRO O LOGIN Y LE AGREGO LA TRIVIA GANADA
+        user=userControl(session)
+        if request.method == 'POST' and user['user_data']:
+            session['user'].update({'ganadas':user['user_data'].get('ganadas')})
+            session['user'].update({'mejor_tf':round(user['user_data'].get('mejor_tf'),2)})
+    
+    ranking=rankear()
+    
+    debug_printSession()
     return render_template("fin.html.jinja2",
                            tiempo=tiempo,
                            titulo=" - Fin",
                            login_form=user['login_form'],
                            register_form=user['register_form'],
-                           user_data=user['user_data'])
+                           user_data=user['user_data'],
+                           ranking=ranking)
     
 @app.route('/trivia/salir')
 def trivia_salir():
@@ -242,7 +270,7 @@ def tiempo_formatear(duracion):
     else:
         return "%d minutos y %d segundos" % (formato.minute, formato.second)
 
-def userControl():
+def userControl(session):
     #DECLARO FORMULARIOS PARA LOGEAR Y REGISTRARSE
     login_form = LoginForm(prefix="login_form")
     register_form = RegisterForm(prefix="register_form")
@@ -257,10 +285,8 @@ def userControl():
     
     if request.method == 'POST':
         if register_form.submit() and register_form.password_repeat.data:
-            print ("Register form is submitted")
-            user_data=registerRequest(register_form, session)
+            user_data=registerRequest(register_form,session)
         if login_form.submit() and (not register_form.password_repeat.data):
-            print ("Login form is submitted")
             user_data=logInRequest(login_form,session)
     return {'user_data':user_data,'login_form':login_form,'register_form':register_form}
 
@@ -316,7 +342,14 @@ def registerRequest(register_form,session):
                 print(str(e)+" "+str(type(e)))
             return None
     return None
-            
+
+def rankear():
+    dato={'mejor_tf':None,'ganadas':None,'sabelotodo':{}}
+    dato.update({'mejor_tf':Usuario.query.filter(sqlalchemy.not_(Usuario.ganadas.contains(0))).order_by(Usuario.mejor_tf).limit(100).all()})
+    dato.update({'ganadas':Usuario.query.filter(sqlalchemy.not_(Usuario.ganadas.contains(0))).order_by(desc(Usuario.ganadas)).limit(100).all()})
+    #dato['sabelotodo']=Usuario.query.filter(sqlalchemy.not_(Usuario.sabelotodo.contains(0))).order_by(Usuario.sabelotodo).limit(100).all()
+    return dato
+
 def debug_printSession():
     print("\n"+"-"*100)
     print("SESSION_ITEMS:\n")

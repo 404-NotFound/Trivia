@@ -1,0 +1,30 @@
+<!-- Modal -->
+<div class="modal fade" id="rankingModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"><i class="fas fa-trophy"> </i> Ranking <small> Mejores 100</small></h5>
+      
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <h6 class="text-center">
+	      <div class="btn-group btn-group-toggle text-center" data-toggle="buttons" aria-label="Basic example">
+			  <button id="btnX" type="button" class="btn btn-secondary active" onclick="mejor_tfDiv()">Tiempo</button>
+			  <button id="btnZ" type="button" class="btn btn-secondary" onclick="sabelotodoDiv()">Sabelotodo</button>
+			  <button id="btnY" type="button" class="btn btn-secondary" onclick="ganadasDiv()">Trivias</button>
+		  </div>
+	  		<hr>
+	  </h6>
+      <div class="container">
+		{% include 'rankgrid.html.jinja2' %}
+      </div>
+	  </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Atras</button>
+      </div>
+    </div>
+  </div>
+</div>

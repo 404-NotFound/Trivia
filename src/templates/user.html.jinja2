@@ -2,7 +2,9 @@
 <div class="collapse" id="userPanel">
   <div class="card card-body">
     <p><i class="fas fa-trophy"></i> Trivias ganadas: {{ user_data.ganadas }}</p>
-    <p><i class="fas fa-stopwatch"></i> Mejor tiempo: {{ user_data.mejor_tf }}"</p>
+    <p><i class="fas fa-stopwatch"></i> Tu mejor tiempo: {{ user_data.mejor_tf }}"</p>
+    <a data-dismiss="modal" data-toggle="modal" data-target="#rankingModalLong" href="#"><i class="fas fa-trophy"></i> Ranking</a>
+    <br>
     <a data-toggle="modal" data-target="#opciones" href="#"><i class="fas fa-cog"></i> Opciones</a>
   </div>
 </div>

@@ -1,0 +1,49 @@
+<!-- Modal -->
+<div class="modal fade" id="sugerenciaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"><i class="far fa-smile-wink"></i> Sugerencia</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+	      <div class="row justify-content-md-center">
+		      <div class="col-md-auto text-center">
+		      <h4>Ganaste una Trivia!</h4>
+		      <b>Te sugerimos registrarte para clasificar en el ranking!</b>
+		      <br><br>
+		      <div class="row">
+			     <div class="col-md-6 col-lg-6">
+			      	<a class="nav-link py-3 px-0 px-lg-3 rounded" data-dismiss="modal" data-toggle="modal" data-target="#loginModal" href="#">
+						<i class="fas fa-user"></i> Iniciar sesión   
+					</a>
+			     </div>
+			     <div class="col-md-6 col-lg-6">
+					<a class="nav-link py-3 px-0 px-lg-3 rounded" data-dismiss="modal" data-toggle="modal" data-target="#registerModal" href="#">
+						<i class="fas fa-user-plus"></i> Registrarme   
+					</a>
+			     </div>
+		      </div>
+				<br>
+				<a class="btn btn-xl btn-primary" href="{{ url_for('trivia_inicio') }}">
+		    &#128075; No gracias
+		  	</a>
+		  	<br>
+		      </div>
+	      </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+		<div>
+			<!-- link a trigger modal register -->
+			<a class="nav-link py-3 px-0 px-lg-3 rounded" data-dismiss="modal" data-toggle="modal" data-target="#rankingModalLong" href="#">
+				<i class="fas fa-trophy"></i> Ranking   
+				</a>
+		</div>
+	        <!-- <button type="button" class="btn btn-primary">Iniciar Sesión</button> -->
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Atras</button>
+      </div>
+    </div>
+  </div>
+</div>
