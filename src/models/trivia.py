@@ -6,6 +6,8 @@ from sqlalchemy import func, DateTime, update
 from sqlalchemy.sql import exists
 from flask_bcrypt import Bcrypt
 from models.errors import *
+from enum import unique
+from builtins import isinstance
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -46,6 +48,7 @@ class Usuario(db.Model):
     #DATOS DE TRIVIAS GANADAS
     ganadas = db.Column(db.Integer, unique=False, nullable=True)
     mejor_tf = db.Column(db.Float, unique=False, nullable=True)
+    sabelotodo = db.Column(db.Integer, unique=False, nullable=True)
     #COMENTARIOS POST
     posts = db.relationship('Post', backref='usuario',lazy='dynamic')
     #FECHA DE INGRESO
@@ -69,12 +72,13 @@ class Post(db.Model):
         return '<User: %s | Post: %s>' % (self.autor_id,self.text)
 
 class Usuarie:
-    def __init__(self,username,email,password,mejor_tf,ganadas):
+    def __init__(self,username,email,password,mejor_tf,ganadas,sabelotodo):
         self.username = self.validarNombre(username)
         self.email = self.validarEmail(email)
         self.password = self.validarPassword(password)
         self.mejor_tf = self.validarTF(mejor_tf)
         self.ganadas = self.validarGanadas(ganadas)
+        self.sabelotodo = self.validarSabelotodo(sabelotodo)
     def __str__(self):
         return "Usuario: {}".format(self.username)
     def get_nombre(self):
@@ -85,6 +89,8 @@ class Usuarie:
         return self.ganadas
     def get_mejor_tf(self):
         return self.mejor_tf
+    def get_sabelotodo(self):
+        return self.sabelotodo
     def get_all(self):
         return str([self.username,self.email,self.ganadas,self.mejor_tf])
     def validarNombre(self, v_username):
@@ -108,6 +114,9 @@ class Usuarie:
         if isinstance(v_ganadas, int):
             return v_ganadas
         raise InternoError()
+    def validarSabelotodo(self, v_sabelotodo):
+        if isinstance(v_sabelotodo, int):
+            return v_sabelotodo
     def registrar(self):
         if db.session.query(exists().where(Usuario.username==self.username)).scalar():
             raise YaExisteUsuarioError()
@@ -118,7 +127,8 @@ class Usuarie:
                 username=str(self.username), 
                 email=str(self.email),
                 ganadas=self.ganadas,
-                mejor_tf=self.mejor_tf
+                mejor_tf=self.mejor_tf,
+                sabelotodo=self.sabelotodo
                 )
             new_user.set_password(str(self.password))
             db.session.add(new_user)
@@ -128,8 +138,8 @@ class Usuarie:
             raise UsuarioInvalidoError()
         return "Usuario registrado."
 
-def register(nombre,passwd1,passwd2,email,tf=None,gano=0):
-    u_nuevo=Usuarie(nombre,email,passwd1,tf,gano)
+def register(nombre,passwd1,passwd2,email,tf=None,gano=0,sabelotodo=0):
+    u_nuevo=Usuarie(nombre,email,passwd1,tf,gano,sabelotodo)
     if len(passwd1)<6:
         raise PasswordInvalidaError()
     if passwd1!=passwd2:
@@ -140,7 +150,8 @@ def register(nombre,passwd1,passwd2,email,tf=None,gano=0):
             'username':user.username,
             'email':user.email,
             'ganadas':user.ganadas,
-            'mejor_tf':user.mejor_tf}
+            'mejor_tf':user.mejor_tf,
+            'sabelotodo':user.sabelotodo}
     
 def logIn(username_o_mail,password):
     try:
@@ -158,7 +169,8 @@ def logIn(username_o_mail,password):
                     'username':user.username,
                     'email':user.email,
                     'ganadas':user.ganadas,
-                    'mejor_tf':user.mejor_tf}
+                    'mejor_tf':user.mejor_tf,
+                    'sabelotodo':user.sabelotodo}
     except:
         raise LoginPasswordError()
     raise LoginPasswordError()
@@ -179,12 +191,15 @@ def postear(texto,autor_id):
         db.session.rollback()
         raise PostError()
 
-def ganar(ganador_id,ganador_tf):
+def ganar(ganador_id,ganador_tf,sabelotodo):
     usuario_g=Usuario.query.filter_by(id=ganador_id).first()
     premios=usuario_g.ganadas+1
     tf_anterior=usuario_g.mejor_tf
     nuevo_tf=tf_anterior
     db.session.query(Usuario).filter(Usuario.id==ganador_id).update({'ganadas':premios})
+    if sabelotodo:
+        premios_sabelotodo=usuario_g.sabelotodo+1
+        db.session.query(Usuario).filter(Usuario.id==ganador_id).update({'sabelotodo':premios_sabelotodo})
     db.session.commit()
     if isinstance(tf_anterior, float):
         if ganador_tf<tf_anterior:
@@ -195,7 +210,7 @@ def ganar(ganador_id,ganador_tf):
         db.session.query(Usuario).filter(Usuario.id==ganador_id).update({'mejor_tf':ganador_tf})
         nuevo_tf=ganador_tf
         db.session.commit()
-    return {'ganadas':premios,'mejor_tf':nuevo_tf}
+    return {'ganadas':premios,'mejor_tf':nuevo_tf,'sabelotodo':premios_sabelotodo}
 
 '''
 msgP={}

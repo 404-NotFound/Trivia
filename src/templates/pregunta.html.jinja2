@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block title %}{{ titulo }}{% endblock %}
 {% block head %}
-    {{ super() }}
+    {{ super() }}    
+    <!-- Si el jugador no continua, se redirecciona a la siguiente pregunta automaticamente -->
+    <meta http-equiv="refresh" content="30" />
 {% endblock %}
 {% block content %}
 

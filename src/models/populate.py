@@ -265,7 +265,8 @@ db.session.add(r_arte_1_3)
 admin = Usuario(username="Admin", 
                 email="no-reply@trivia-support.com", 
                 ganadas=0,
-                mejor_tf=0.0)
+                mejor_tf=0.0,
+                sabelotodo=0)
 admin.set_password("admin")
 db.session.add(admin)
 

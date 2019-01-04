@@ -30,6 +30,7 @@ def trivia_inicio():
             session.pop('ti')
             session.pop('cat_jugadas')
             session.pop('tf')
+            session.pop('sabelotodo')
     except:
         pass;
     
@@ -62,7 +63,7 @@ def trivia_categorias():
         if session['ti']:
             pass;
     except:
-        #SI NO EXISTE CREO SESSION
+        #SI NO EXISTE CREO LA SESSION
         session['ti']=time.time()
         #CREO UN DICC CON TODAS LAS CATEGORIAS {'1':False,'2':False,...}
         #LAS GUARDO TODAS EN False PORQUE NO FUERON GANADAS AÚN
@@ -71,6 +72,8 @@ def trivia_categorias():
             dicc[str(cat.id)] = False
         #GUARDO EN session['cat_jugadas'] EL DIC
         session['cat_jugadas']=dicc
+        #SABELOTODO ME INDICA SI CONTESTO BIEN TODAS LAS PREGUNTAS SIN ERRORES
+        session['sabelotodo']=True
     
     #ACA SEPARO LAS CATEGORIAS GANAS DE LAS SIN JUGAR/GANAR
     #LE PASO AL TEMPLATE lista_categorias y lista_ganadas
@@ -163,26 +166,29 @@ def trivia_resultado(id_categoria,id_respuesta):
         dic=session['cat_jugadas']
         dic.update({str(id_categoria):True})
         session['cat_jugadas']=dic
+    else:
+        #SI SE EQUIVOCA EN ALGUNA RESPUESTA:
+        session['sabelotodo']=False
     
     #SI EL JUGADOR GANÓ TODAS LAS CATEGORIAS REDIRIGO EL FLUJO AL FINAL DEL JUEGO
     todas_categorias=Categoria.query.all()
     ganador = True
     #PRIMERO RECORRO TODAS LAS CATEGORIAS
     for cat in todas_categorias:
-        #SI ALGUNA CATEGORIA ES FALSE ganador = False
+        #SI QUEDA ALGUNA CATEGORIA SIN GANAR ganador = False
         if session['cat_jugadas'].get(str(cat.id)) == False:
             ganador = False
-    #ACA VA LO QUE SUCEDE CADA VEZ QUE GANA UNA CATEGORIA
-    #SI GANADOR SIGUE EN True REDIRIGO AL TEMPLATE FINAL
+    #SI GANADOR ES True OSEA QUE GANO TODAS LAS CATEGORIAS, REDIRIGO AL TEMPLATE FINAL
     if ganador==True:
-        #ganar() INCREMENTA EN UNO LA DB Y RETONRNA DIC {'ganadas':<int>,'mejor_tf':<float>}
-        #DE PASO ACTUALIZO 'ganadas' y 'mejor_tf' EN LA SESION
+        #ganar() INCREMENTA EN UNO LA DB Y RETONRNA DIC {'ganadas':<int>,'mejor_tf':<float>,'sabelotodo':<bool>}
+        #DE PASO ACTUALIZO 'ganadas', 'mejor_tf' y 'sabelotodo' EN LA SESION
         try:
             session['tf']=(time.time())-(session['ti'])
             ganador_id=session['user'].get("id")
-            dic_ganador=ganar(ganador_id,session['tf'])
+            dic_ganador=ganar(ganador_id,session['tf'],session['sabelotodo'])
             session['user'].update({'ganadas':dic_ganador.get('ganadas')})
             session['user'].update({'mejor_tf':round(dic_ganador.get('mejor_tf'),2)})
+            session['user'].update({'sabelotodo':dic_ganador.get('sabelotodo')})
         except:
             pass;
         return redirect(url_for('trivia_fin'))
@@ -238,6 +244,14 @@ def trivia_fin():
         if request.method == 'POST' and user['user_data']:
             session['user'].update({'ganadas':user['user_data'].get('ganadas')})
             session['user'].update({'mejor_tf':round(user['user_data'].get('mejor_tf'),2)})
+            session['user'].update({'sabelotodo':user['user_data'].get('sabelotodo')})
+    try:
+        if session['sabelotodo']==True:
+            flash("Ganaste sin equivocarte, has obtenido un premio de Sabelotodo!", 'success')
+        else:
+            flash("Se te ha añadido una Trivia exitosamente!", 'success')
+    except:
+        pass;
     
     ranking=rankear()
     
@@ -347,7 +361,7 @@ def rankear():
     dato={'mejor_tf':None,'ganadas':None,'sabelotodo':{}}
     dato.update({'mejor_tf':Usuario.query.filter(sqlalchemy.not_(Usuario.ganadas.contains(0))).order_by(Usuario.mejor_tf).limit(100).all()})
     dato.update({'ganadas':Usuario.query.filter(sqlalchemy.not_(Usuario.ganadas.contains(0))).order_by(desc(Usuario.ganadas)).limit(100).all()})
-    #dato['sabelotodo']=Usuario.query.filter(sqlalchemy.not_(Usuario.sabelotodo.contains(0))).order_by(Usuario.sabelotodo).limit(100).all()
+    dato.update({'sabelotodo':Usuario.query.filter(sqlalchemy.not_(Usuario.sabelotodo.contains(0))).order_by(desc(Usuario.sabelotodo)).limit(100).all()})
     return dato
 
 def debug_printSession():

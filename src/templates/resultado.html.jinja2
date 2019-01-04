@@ -2,14 +2,6 @@
 {% block title %}{{ titulo }}{% endblock %}
 {% block head %}
     {{ super() }}
-    
-    <!-- Si el jugador no continua, se redirecciona a la siguiente pantalla automaticamente -->
-    {% if resultado %}
-    	<meta http-equiv="refresh" content="15; url={{ url_gano }}" />
-    {% else %}
-    	<meta http-equiv="refresh" content="15; url={{ url_perdio }}" />
-    {% endif %}
-    
 {% endblock %}
 {% block content %}
 
@@ -20,7 +12,7 @@
     
 	<!-- Resultado Grid Section -->
     <section class="portfolio" id="jugar">
-      <div class="container text-center">
+      <div class="container text-center" onclick="location.href='{% if resultado %}{{ url_gano }}{% else %}{{ url_perdio }}{% endif %}';">
       
 	      	<br>
 			<h2 class="text-center text-uppercase text-secondary mb-3">Resultado</h2>
@@ -42,30 +34,35 @@
 				{% endif %}
 			</h2>
 			
+				{% if resultado %}
+					{% set url_siguiente = "{{ url_gano }}" %}
+				{% else %}
+					{% set url_siguiente = "{{ url_perdio }}" %}
+				{% endif %}
 			{% for respuesta in respuestas %}
 				{% if respuesta.es_correcta %}
 					{% if relegida == respuesta.text %}
-						<button type="button" class="btn btn-lg btn-success btn-block border-warning" disabled>
+						<button type="button" class="btn btn-lg btn-success btn-block border-warning disabled" href={{ url_siguiente }}>
 								{{ respuesta.text }} &#10004;
 						</button>
 					{% else %}
-						<button type="button" class="btn btn-lg btn-success btn-block" disabled>
+						<button type="button" class="btn btn-lg btn-success btn-block disabled" href={{ url_siguiente }}>
 								{{ respuesta.text }}
 						</button>
 					{% endif %}
 				{% else %}
 					{% if relegida == respuesta.text %}
-						<button type="button" class="btn btn-lg btn-danger btn-block border-warning" disabled>
+						<button type="button" class="btn btn-lg btn-danger btn-block border-warning disabled" href={{ url_siguiente }}>
 							{{ respuesta.text }} &#10008;
 						</button>
 					{% else %}
-						<button type="button" class="btn btn-lg btn-danger btn-block" disabled>
+						<button type="button" class="btn btn-lg btn-danger btn-block disabled" href={{ url_siguiente }}>
 							{{ respuesta.text }}
 						</button>
 					{% endif %}
 				{% endif %}
 			{% endfor %}
-
+			
 		{% include 'volver.html.jinja2' %}
 		
       </div>

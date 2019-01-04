@@ -26,23 +26,18 @@
 					</a>
 			     </div>
 		      </div>
-				<br>
-				<a class="btn btn-xl btn-primary" href="{{ url_for('trivia_inicio') }}">
-		    &#128075; No gracias
-		  	</a>
-		  	<br>
 		      </div>
 	      </div>
       </div>
       <div class="modal-footer d-flex justify-content-between">
 		<div>
 			<!-- link a trigger modal register -->
-			<a class="nav-link py-3 px-0 px-lg-3 rounded" data-dismiss="modal" data-toggle="modal" data-target="#rankingModalLong" href="#">
+			<a class="nav-link py-3 px-0 px-lg-3 rounded" data-toggle="modal" data-target="#rankingModalLong" href="#">
 				<i class="fas fa-trophy"></i> Ranking   
 				</a>
 		</div>
 	        <!-- <button type="button" class="btn btn-primary">Iniciar Sesión</button> -->
-			<button type="button" class="btn btn-secondary" data-dismiss="modal">Atras</button>
+			<a type="button" class="btn btn-primary" href="{{ url_for('trivia_inicio') }}">&#128075; No gracias</a>
       </div>
     </div>
   </div>
